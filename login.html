@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Afsal Ahamad">
+  <title>Login — UniWallet</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js"></script>
+  <script src="auth.js"></script>
+  <script src="cursor.js"></script>
+  <style>
+    body.auth-body {
+      background: radial-gradient(circle at top right, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15), transparent 40%),
+        radial-gradient(circle at bottom left, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1), transparent 40%),
+        hsl(var(--bg-color));
+      overflow: hidden;
+    }
+
+    .auth-container {
+      perspective: 1000px;
+    }
+
+    .auth-card {
+      backdrop-filter: blur(20px);
+      background: hsla(var(--bg-card), 0.6);
+      border: 1px solid var(--glass-border);
+      transform: translateY(0);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: cardEntry 0.8s ease-out;
+    }
+
+    @keyframes cardEntry {
+      from {
+        opacity: 0;
+        transform: translateY(30px) rotateX(-10deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+      }
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+
+    .nav-logo span {
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    .form-input {
+      background: hsla(0, 0%, 0%, 0.3) !important;
+      border: 1px solid var(--glass-border) !important;
+      font-family: var(--font-main);
+    }
+
+    .btn-primary {
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+
+<body class="auth-body">
+
+  <button class="theme-toggle-btn" onclick="toggleTheme()"
+    style="position: absolute; top: 2rem; right: 2rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--glass-shadow); z-index: 1000;">🌓</button>
+
+  <div class="auth-container">
+    <div class="nav-logo" style="margin-bottom: 3rem; font-size: 2.5rem; text-align: center; color: var(--accent);">
+      Uni<span>Wallet</span></div>
+
+    <div class="auth-card">
+      <h1 class="auth-title">Welcome Back</h1>
+      <p class="auth-subtitle">Log in to your student financial portal.</p>
+
+      <div id="authError" class="auth-error" style="display:none;"></div>
+
+      <form onsubmit="login(event)">
+        <div class="form-group">
+          <label class="form-label">University Email</label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="name@university.edu" required />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 2rem;">
+          <label class="form-label">Security Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">Enter Dashboard</button>
+      </form>
+
+      <div class="auth-footer">
+        New to UniWallet? <a href="signup.html">Create Account</a>
+      </div>
+    </div>
+  </div>
+
+  <footer
+    style="position: absolute; bottom: 2rem; left: 0; right: 0; text-align: center; font-size: 0.7rem; color: var(--text-dim); line-height: 1.6;">
+    &copy; 2026 UniWallet All rights reserved.<br />
+    Developed by <strong>Afsal Ahamad</strong>
+  </footer>
+
+  <script>
+    redirectIfLoggedIn();
+  </script>
+</body>
+
+</html>

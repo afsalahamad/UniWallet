@@ -249,6 +249,7 @@ body {
 }
 
 .btn-solar:hover { filter: brightness(1.1); transform: scale(1.02); }
+<<<<<<< HEAD
 .btn-solar.outline {
   background: transparent;
   border: 1px solid var(--accent);
@@ -258,6 +259,8 @@ body {
   background: var(--accent);
   color: white;
 }
+=======
+>>>>>>> e9b26a20786d659e00371142d7fc0511e3481b03
 
 /* --- Transaction Tabs --- */
 .type-tabs {
@@ -604,4 +607,35 @@ select.form-input-solar option {
   color: var(--accent);
   text-decoration: none;
   font-weight: 700;
+<<<<<<< HEAD
 }
+=======
+}
+.footer {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    width: 90%;
+    max-width: 500px;
+
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 600px) {
+    .footer {
+      font-size: 0.65rem;
+      bottom: 0.5rem;
+      line-height: 1.5;
+      width: 95%;
+    }
+  }
+>>>>>>> e9b26a20786d659e00371142d7fc0511e3481b03

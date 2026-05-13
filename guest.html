@@ -52,6 +52,34 @@
       color: var(--accent);
       font-style: normal;
     }
+
+    .pulse-btn {
+        animation: pulse 2s infinite;
+        background: var(--accent);
+        border: none;
+        color: white;
+        padding: 1.2rem;
+        border-radius: var(--radius-sm);
+        font-weight: 800;
+        font-family: var(--font-heading);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+        width: 100%;
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0.4); }
+        70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0); }
+    }
+
+    .pulse-btn:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
   </style>
 </head>
 
@@ -76,7 +104,8 @@
         <li><i>✔</i> Perfect for a quick trial</li>
       </ul>
 
-      <button onclick="guestLogin()" class="btn btn-primary" style="width: 100%; padding: 1rem; margin-bottom: 1.5rem;">
+      <!-- Using a more robust onclick and highlighted class -->
+      <button onclick="tryGuestLogin()" class="pulse-btn" style="margin-bottom: 1.5rem;">
         Start Exploring Now
       </button>
 
@@ -92,6 +121,20 @@
   </footer>
 
   <script>
+    function tryGuestLogin() {
+        console.log("Button clicked. Attempting guest login...");
+        if (typeof guestLogin === 'function') {
+            guestLogin();
+        } else {
+            console.error("guestLogin function not found in auth.js!");
+            // Fallback emergency login
+            const guestUser = { id: 'guest', name: 'Guest Explorer', email: 'guest@uniwallet.com', isGuest: true };
+            localStorage.setItem('uniwallet_session', JSON.stringify(guestUser));
+            sessionStorage.setItem('uniwallet_show_welcome', 'true');
+            window.location.href = 'index.html';
+        }
+    }
+
     redirectIfLoggedIn();
   </script>
 </body>

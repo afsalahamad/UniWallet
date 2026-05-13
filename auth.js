@@ -126,13 +126,20 @@ function showAuthError(message) {
 
 // Guest Login Logic
 function guestLogin() {
+    console.log("Initializing guest login sequence...");
     const guestUser = {
         id: 'guest',
         name: 'Guest Explorer',
         email: 'guest@uniwallet.com',
         isGuest: true
     };
-    localStorage.setItem(SESSION_KEY, JSON.stringify(guestUser));
-    sessionStorage.setItem('uniwallet_show_welcome', 'true');
-    window.location.href = 'index.html';
+    try {
+        localStorage.setItem(SESSION_KEY, JSON.stringify(guestUser));
+        sessionStorage.setItem('uniwallet_show_welcome', 'true');
+        console.log("Guest session created. Redirecting to dashboard...");
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error("Critical: Guest login failed", err);
+        alert("System error during guest access. Please check your browser's private mode settings.");
+    }
 }

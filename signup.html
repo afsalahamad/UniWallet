@@ -68,6 +68,29 @@
       letter-spacing: 1px;
       font-size: 0.8rem;
     }
+
+    .guest-btn {
+        margin-top: 1.5rem;
+        width: 100%;
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        padding: 0.8rem;
+        border-radius: var(--radius-sm);
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    .guest-btn:hover {
+        background: var(--accent);
+        color: white;
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
   </style>
 </head>
 
@@ -106,6 +129,8 @@
         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">Create My Wallet</button>
       </form>
 
+      <a href="guest.html" class="guest-btn">✨ Explore as Guest</a>
+
       <div class="auth-footer">
         Already a member? <a href="login.html">Sign In</a>
       </div>
@@ -114,7 +139,7 @@
 
   <footer class="footer">
     &copy; 2026 UniWallet . All rights reserved.<br />
-    Developed by <strong>Afsal Ahamad</strong>
+    Engineering Developed by <strong>Afsal Ahamad</strong>
   </footer>
 
   <script>

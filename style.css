@@ -502,6 +502,8 @@ select.form-input-solar option {
   min-height: 100vh;
   margin: 0;
   color: hsl(var(--text-primary));
+  overflow-y: auto !important;
+  padding: 2rem 0;
 }
 
 .auth-container {
@@ -609,30 +611,24 @@ select.form-input-solar option {
 }
 
 .footer {
-    position: fixed;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    
-    width: 90%;
-    max-width: 500px;
-
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    line-height: 1.6;
-
-    padding: 0.5rem 1rem;
-    box-sizing: border-box;
-  }
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  padding: 2rem 1rem;
+  margin-top: auto;
+  box-sizing: border-box;
+}
 
   /* Mobile adjustments */
   @media (max-width: 600px) {
     .footer {
-      font-size: 0.65rem;
-      bottom: 0.5rem;
-      line-height: 1.5;
-      width: 95%;
+      font-size: 0.7rem;
+      padding: 1.5rem 1rem;
+    }
+    .auth-container {
+      padding: 1rem;
     }
   }
 / *   l o g i c   u p d a t e d   * /  

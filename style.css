@@ -249,6 +249,15 @@ body {
 }
 
 .btn-solar:hover { filter: brightness(1.1); transform: scale(1.02); }
+.btn-solar.outline {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+.btn-solar.outline:hover {
+  background: var(--accent);
+  color: white;
+}
 
 /* --- Transaction Tabs --- */
 .type-tabs {

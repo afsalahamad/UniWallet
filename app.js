@@ -75,13 +75,13 @@ function showToast(msg) {
 function showPage(name) {
   // Update UI State
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(i => i.classList.remove('active'));
 
   const target = document.getElementById('page-' + name);
   if (target) {
     target.classList.add('active');
     // Find the button that matches the name
-    document.querySelectorAll('.nav-item').forEach(btn => {
+    document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(btn => {
         if(btn.onclick && btn.onclick.toString().includes(name)) btn.classList.add('active');
     });
     

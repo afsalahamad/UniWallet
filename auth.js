@@ -5,8 +5,13 @@ const SESSION_KEY = 'uniwallet_session';
 
 // Helper to get users from localStorage
 function getUsers() {
-    const users = localStorage.getItem(USERS_KEY);
-    return users ? JSON.parse(users) : [];
+    try {
+        const users = localStorage.getItem(USERS_KEY);
+        return users ? JSON.parse(users) : [];
+    } catch (e) {
+        console.error("Failed to parse users", e);
+        return [];
+    }
 }
 
 // Helper to save users to localStorage

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Afsal Ahamad">
+  <title>Guest Access — UniWallet</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js"></script>
+  <script src="auth.js"></script>
+  <script src="cursor.js"></script>
+  <style>
+    body.auth-body {
+      background: radial-gradient(circle at top right, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15), transparent 40%),
+        radial-gradient(circle at bottom left, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1), transparent 40%),
+        hsl(var(--bg-color));
+    }
+
+    .guest-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .feature-list {
+      text-align: left;
+      margin: 2rem 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature-list li {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .feature-list li i {
+      color: var(--accent);
+      font-style: normal;
+    }
+  </style>
+</head>
+
+<body class="auth-body">
+
+  <button class="theme-toggle-btn" onclick="toggleTheme()"
+    style="position: absolute; top: 2rem; right: 2rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--glass-shadow); z-index: 1000;">🌓</button>
+
+  <div class="auth-container">
+    <div class="nav-logo" style="margin-bottom: 3rem; font-size: 2.5rem; text-align: center; color: var(--accent);">
+      Uni<span>Wallet</span></div>
+
+    <div class="auth-card" style="text-align: center;">
+      <span class="guest-icon">🎭</span>
+      <h1 class="auth-title">Guest Explorer</h1>
+      <p class="auth-subtitle">Try UniWallet without an account.</p>
+
+      <ul class="feature-list">
+        <li><i>✔</i> Instant access to all features</li>
+        <li><i>✔</i> No registration required</li>
+        <li><i>✔</i> Data stays on this device only</li>
+        <li><i>✔</i> Perfect for a quick trial</li>
+      </ul>
+
+      <button onclick="guestLogin()" class="btn btn-primary" style="width: 100%; padding: 1rem; margin-bottom: 1.5rem;">
+        Start Exploring Now
+      </button>
+
+      <div class="auth-footer">
+        Want to save your data forever? <a href="signup.html">Create Account</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    &copy; 2026 UniWallet All rights reserved.<br />
+    Developed by <strong>Afsal Ahamad</strong>
+  </footer>
+
+  <script>
+    redirectIfLoggedIn();
+  </script>
+</body>
+
+</html>

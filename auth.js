@@ -123,3 +123,16 @@ function showAuthError(message) {
         alert(message);
     }
 }
+
+// Guest Login Logic
+function guestLogin() {
+    const guestUser = {
+        id: 'guest',
+        name: 'Guest Explorer',
+        email: 'guest@uniwallet.com',
+        isGuest: true
+    };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(guestUser));
+    sessionStorage.setItem('uniwallet_show_welcome', 'true');
+    window.location.href = 'index.html';
+}

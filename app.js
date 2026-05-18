@@ -42,51 +42,51 @@ let txType = 'expense';
 const DATA_KEY = currentUser ? ('uniwallet_data_' + currentUser.id) : null;
 
 const CATS = {
-    food:          { label:'Food',          icon:'🍜', color:'#10b981' },
-    transport:     { label:'Transport',     icon:'🚌', color:'#3b82f6' },
-    study:         { label:'Study',         icon:'📚', color:'#6366f1' },
-    entertainment: { label:'Game',          icon:'🎮', color:'#f59e0b' },
-    health:        { label:'Health',        icon:'💊', color:'#ef4444' },
-    shopping:      { label:'Shop',          icon:'🛍️', color:'#ec4899' },
-    subscription:  { label:'Subscription',  icon:'🔄', color:'#8b5cf6' },
-    other:         { label:'Other',         icon:'📦', color:'#94a3b8' },
-    allowance:     { label:'Allowance',     icon:'💰', color:'#10b981' },
-    salary:        { label:'Salary',        icon:'💼', color:'#10b981' },
-    gift:          { label:'Gift',          icon:'🎁', color:'#f59e0b' },
-    refund:        { label:'Refund',        icon:'🔙', color:'#3b82f6' },
-    savings:       { label:'Savings',       icon:'🏦', color:'#6366f1' }
+    food: { label: 'Food', icon: '🍜', color: '#10b981' },
+    transport: { label: 'Transport', icon: '🚌', color: '#3b82f6' },
+    study: { label: 'Study', icon: '📚', color: '#6366f1' },
+    entertainment: { label: 'Game', icon: '🎮', color: '#f59e0b' },
+    health: { label: 'Health', icon: '💊', color: '#ef4444' },
+    shopping: { label: 'Shop', icon: '🛍️', color: '#ec4899' },
+    subscription: { label: 'Subscription', icon: '🔄', color: '#8b5cf6' },
+    other: { label: 'Other', icon: '📦', color: '#94a3b8' },
+    allowance: { label: 'Allowance', icon: '💰', color: '#10b981' },
+    salary: { label: 'Salary', icon: '💼', color: '#10b981' },
+    gift: { label: 'Gift', icon: '🎁', color: '#f59e0b' },
+    refund: { label: 'Refund', icon: '🔙', color: '#3b82f6' },
+    savings: { label: 'Savings', icon: '🏦', color: '#6366f1' }
 };
 
-function saveData() { 
-    if (DATA_KEY) localStorage.setItem(DATA_KEY, JSON.stringify(data)); 
+function saveData() {
+    if (DATA_KEY) localStorage.setItem(DATA_KEY, JSON.stringify(data));
 }
 
 function loadData() {
     if (!DATA_KEY) return;
     const saved = localStorage.getItem(DATA_KEY);
     if (saved) {
-        try { 
-            const parsed = JSON.parse(saved); 
+        try {
+            const parsed = JSON.parse(saved);
             data = { ...data, ...parsed };
             // Ensure mandatory arrays exist
-            if(!data.transactions) data.transactions = [];
-            if(!data.budgets) data.budgets = {};
-            if(!data.goals) data.goals = [];
-            if(!data.splits) data.splits = [];
-            if(!data.recurring) data.recurring = [];
-            if(!data.loans) data.loans = [];
-            if(!data.profile) data.profile = {};
+            if (!data.transactions) data.transactions = [];
+            if (!data.budgets) data.budgets = {};
+            if (!data.goals) data.goals = [];
+            if (!data.splits) data.splits = [];
+            if (!data.recurring) data.recurring = [];
+            if (!data.loans) data.loans = [];
+            if (!data.profile) data.profile = {};
 
             // Sync Profile with Signup data if empty
             if (!data.profile.name && currentUser) data.profile.name = currentUser.name || '';
             if (!data.profile.email && currentUser) data.profile.email = currentUser.email || '';
-        } catch(e) { 
-            console.error("Data load error", e); 
+        } catch (e) {
+            console.error("Data load error", e);
         }
     } else {
         // Default demo data for first time
         data.transactions = [
-            { id:1, name:'Initial Balance', amt:1000, cat:'other', type:'income', date:new Date().toISOString().split('T')[0] }
+            { id: 1, name: 'Initial Balance', amt: 1000, cat: 'other', type: 'income', date: new Date().toISOString().split('T')[0] }
         ];
         saveData();
     }
@@ -111,12 +111,12 @@ function showPage(name) {
     if (target) {
         target.classList.add('active');
         document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(btn => {
-            if(btn.onclick && btn.onclick.toString().includes(name)) btn.classList.add('active');
+            if (btn.onclick && btn.onclick.toString().includes(name)) btn.classList.add('active');
         });
-        
+
         const titleEl = document.getElementById('pageTitle');
-        if(titleEl) titleEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
-        
+        if (titleEl) titleEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+
         // Render current view
         if (name === 'overview') renderAll();
         else if (name === 'budget') renderBudget();
@@ -125,8 +125,8 @@ function showPage(name) {
         else if (name === 'loans') renderLoans();
         else if (name === 'history') renderHistory();
         else if (name === 'profile') renderProfile();
-        
-        window.scrollTo(0,0);
+
+        window.scrollTo(0, 0);
     }
 }
 
@@ -135,15 +135,15 @@ function updateTotals() {
     const monthlyTxs = getMonthlyTransactions();
     const monthlyIncome = monthlyTxs.filter(t => t.type === 'income').reduce((s, t) => s + t.amt, 0);
     const monthlySpent = monthlyTxs.filter(t => t.type === 'expense').reduce((s, t) => s + t.amt, 0);
-    
+
     const allIncome = data.transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amt, 0);
     const allSpent = data.transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amt, 0);
     const totalBalance = allIncome - allSpent;
-    
+
     const incomeEl = document.getElementById('totalIncome');
     const spentEl = document.getElementById('totalSpent');
     const leftEl = document.getElementById('totalLeft');
-    
+
     if (incomeEl) incomeEl.textContent = fmt(monthlyIncome);
     if (spentEl) spentEl.textContent = fmt(monthlySpent);
     if (leftEl) leftEl.textContent = fmt(totalBalance);
@@ -153,34 +153,34 @@ function renderChart() {
     const container = document.getElementById('spendingChart');
     if (!container) return;
     const now = new Date();
-    const days = Array.from({length:7}, (_,i) => {
-        const d = new Date(); d.setDate(now.getDate() - (6-i));
+    const days = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date(); d.setDate(now.getDate() - (6 - i));
         return d.toISOString().split('T')[0];
     });
-    const totals = days.map(day => data.transactions.filter(t => t.date === day && t.type === 'expense').reduce((s,t)=>s+t.amt,0));
+    const totals = days.map(day => data.transactions.filter(t => t.date === day && t.type === 'expense').reduce((s, t) => s + t.amt, 0));
     const max = Math.max(...totals, 500);
-    container.innerHTML = totals.map(v => `<div class="chart-bar" style="height:${(v/max)*100}%"></div>`).join('');
+    container.innerHTML = totals.map(v => `<div class="chart-bar" style="height:${(v / max) * 100}%"></div>`).join('');
 }
 
 function renderInsights() {
     const el = document.getElementById('quickInsights');
     if (!el) return;
-    const txs = getMonthlyTransactions().filter(t=>t.type==='expense');
-    const income = getMonthlyTransactions().filter(t=>t.type==='income').reduce((s,t)=>s+t.amt,0);
-    const spent = txs.reduce((s,t)=>s+t.amt,0);
+    const txs = getMonthlyTransactions().filter(t => t.type === 'expense');
+    const income = getMonthlyTransactions().filter(t => t.type === 'income').reduce((s, t) => s + t.amt, 0);
+    const spent = txs.reduce((s, t) => s + t.amt, 0);
 
-    if (!txs.length) { 
-        el.innerHTML = '<div style="color:var(--text-dim); font-size:0.75rem; margin-top:1rem;">Waiting for spend data...</div>'; 
-        return; 
+    if (!txs.length) {
+        el.innerHTML = '<div style="color:var(--text-dim); font-size:0.75rem; margin-top:1rem;">Waiting for spend data...</div>';
+        return;
     }
 
-    const cats = {}; txs.forEach(t => cats[t.cat] = (cats[t.cat]||0) + t.amt);
-    const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+    const cats = {}; txs.forEach(t => cats[t.cat] = (cats[t.cat] || 0) + t.amt);
+    const sorted = Object.entries(cats).sort((a, b) => b[1] - a[1]);
     if (!sorted.length) return;
-    
+
     const top = sorted[0];
     const catInfo = CATS[top[0]] || CATS.other;
-    const health = income > 0 ? Math.round((1 - (spent/income)) * 100) : 100;
+    const health = income > 0 ? Math.round((1 - (spent / income)) * 100) : 100;
 
     el.innerHTML = `
         <div style="margin-top:0.8rem;">
@@ -199,16 +199,16 @@ function renderInsights() {
 function renderTransactions() {
     const dashList = document.getElementById('txList');
     const histList = document.getElementById('historyTxList');
-    
+
     const dashSearch = document.getElementById('txSearch')?.value.toLowerCase() || '';
     const histSearch = document.getElementById('historySearch')?.value.toLowerCase() || '';
-    
+
     if (dashList) {
         let txs = data.transactions.filter(t => t.name.toLowerCase().includes(dashSearch) || (CATS[t.cat] && CATS[t.cat].label.toLowerCase().includes(dashSearch)));
         if (!txs.length) dashList.innerHTML = '<div style="padding:1rem; text-align:center; color:var(--text-dim); font-size:0.8rem;">No recent activity.</div>';
         else dashList.innerHTML = txs.slice(0, 10).map(t => txItemHTML(t)).join('');
     }
-    
+
     if (histList) {
         let txs = data.transactions.filter(t => t.name.toLowerCase().includes(histSearch) || (CATS[t.cat] && CATS[t.cat].label.toLowerCase().includes(histSearch)));
         if (!txs.length) histList.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--text-dim);">No transactions found.</div>';
@@ -225,7 +225,7 @@ function txItemHTML(t) {
                 <div style="font-weight:700;">${t.name}</div>
                 <div style="font-size:0.75rem; color:var(--text-dim);">${catInfo.label} • ${t.date}</div>
             </div>
-            <div style="font-weight:800; color:${t.type==='income'?'var(--green)':'var(--red)'}">${t.type==='income'?'+':'-'}${fmt(t.amt)}</div>
+            <div style="font-weight:800; color:${t.type === 'income' ? 'var(--green)' : 'var(--red)'}">${t.type === 'income' ? '+' : '-'}${fmt(t.amt)}</div>
             <button onclick="deleteTx(${t.id})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
         </div>
     `;
@@ -234,21 +234,21 @@ function txItemHTML(t) {
 // ---- PORTAL ACTIONS ----
 function renderBudget() {
     const grid = document.getElementById('budgetGrid');
-    if(!grid) return;
-    const txs = getMonthlyTransactions().filter(t=>t.type==='expense');
-    const totals = {}; txs.forEach(t => totals[t.cat] = (totals[t.cat]||0) + t.amt);
-    
+    if (!grid) return;
+    const txs = getMonthlyTransactions().filter(t => t.type === 'expense');
+    const totals = {}; txs.forEach(t => totals[t.cat] = (totals[t.cat] || 0) + t.amt);
+
     const content = Object.entries(data.budgets).map(([cat, limit]) => {
         const catInfo = CATS[cat] || CATS.other;
         const spent = totals[cat] || 0;
-        const pct = Math.min(100, (spent/limit)*100);
+        const pct = Math.min(100, (spent / limit) * 100);
         return `
             <div class="bento-card">
                 <div class="card-label">${catInfo.icon} ${catInfo.label}</div>
                 <div class="card-value" style="font-size:1.5rem;">${fmt(spent)}</div>
                 <div style="font-size:0.8rem; color:var(--text-dim); margin-top:0.3rem;">Limit: ${fmt(limit)}</div>
                 <div style="margin-top:1rem; height:6px; background:hsla(0,0%,100%,0.05); border-radius:10px; overflow:hidden;">
-                    <div style="width:${pct}%; height:100%; background:${pct>90?'var(--red)':'var(--accent)'};"></div>
+                    <div style="width:${pct}%; height:100%; background:${pct > 90 ? 'var(--red)' : 'var(--accent)'};"></div>
                 </div>
             </div>
         `;
@@ -258,7 +258,7 @@ function renderBudget() {
 
 function renderGoals() {
     const grid = document.getElementById('goalsGrid');
-    if(!grid) return;
+    if (!grid) return;
     if (!data.goals.length) {
         grid.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No goals tracked yet. Click + to start saving!</div></div>';
         return;
@@ -284,7 +284,7 @@ function renderGoals() {
 }
 
 function deleteGoal(id) {
-    if(confirm("Remove this goal?")) {
+    if (confirm("Remove this goal?")) {
         data.goals = data.goals.filter(g => g.id !== id);
         saveData();
         renderGoals();
@@ -293,10 +293,10 @@ function deleteGoal(id) {
 
 function renderRecurring() {
     const el = document.getElementById('recList');
-    if(!el) return;
-    if (!data.recurring.length) { 
-        el.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No active subscriptions.</div></div>'; 
-        return; 
+    if (!el) return;
+    if (!data.recurring.length) {
+        el.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No active subscriptions.</div></div>';
+        return;
     }
     el.innerHTML = data.recurring.map(r => `
         <div class="bento-card">
@@ -340,22 +340,22 @@ function deleteRecurring(id) {
 
 function renderLoans() {
     const el = document.getElementById('loanList');
-    if(!el) return;
-    if (!data.loans.length) { 
-        el.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No active loans or debts.</div></div>'; 
-        return; 
+    if (!el) return;
+    if (!data.loans.length) {
+        el.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No active loans or debts.</div></div>';
+        return;
     }
     el.innerHTML = data.loans.map(l => {
         const isDebt = l.type === 'debt';
         return `
             <div class="bento-card">
                 <div style="display:flex; justify-content:space-between; align-items:start;">
-                    <div class="card-label" style="color:${isDebt?'var(--red)':'var(--green)'}">${isDebt ? '🚨 I OWE' : '💰 OWES ME'}</div>
+                    <div class="card-label" style="color:${isDebt ? 'var(--red)' : 'var(--green)'}">${isDebt ? '🚨 I OWE' : '💰 OWES ME'}</div>
                     <button onclick="deleteLoan(${l.id})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
                 </div>
                 <div style="font-weight:700; margin-top:0.8rem; font-size:1.1rem;">${l.person || 'Unknown'}</div>
                 <div style="font-size:0.7rem; color:var(--text-dim);">${l.name}</div>
-                <div class="card-value" style="font-size:1.6rem; color:${isDebt?'var(--red)':'var(--green)'}">${fmt(l.amt)}</div>
+                <div class="card-value" style="font-size:1.6rem; color:${isDebt ? 'var(--red)' : 'var(--green)'}">${fmt(l.amt)}</div>
                 <div style="font-size:0.75rem; color:var(--text-dim); margin-top:0.3rem;">Due: ${l.date || 'No date'}</div>
                 <button class="btn-solar" style="width:100%; margin-top:1rem; padding:0.5rem; font-size:0.7rem;" onclick="deleteLoan(${l.id})">Settle</button>
             </div>
@@ -404,13 +404,13 @@ function addTransaction() {
     const nameEl = document.getElementById('txName');
     const amtEl = document.getElementById('txAmt');
     const catEl = document.getElementById('txCat');
-    
+
     const name = nameEl.value;
     const amt = parseFloat(amtEl.value);
     const cat = catEl.value;
-    
-    if(!name || isNaN(amt)) return;
-    
+
+    if (!name || isNaN(amt)) return;
+
     data.transactions.unshift({
         id: Date.now(),
         name, amt, cat, type: txType,
@@ -432,7 +432,7 @@ function deleteTx(id) {
 function saveBudget() {
     const cat = document.getElementById('budgetCat').value;
     const amt = parseFloat(document.getElementById('budgetAmt').value);
-    if(cat && !isNaN(amt)) {
+    if (cat && !isNaN(amt)) {
         data.budgets[cat] = amt;
         saveData();
         closeModal('budgetModal');
@@ -444,7 +444,7 @@ function saveGoal() {
     const name = document.getElementById('goalName').value;
     const target = parseFloat(document.getElementById('goalTarget').value);
     const saved = parseFloat(document.getElementById('goalSaved').value) || 0;
-    if(name && !isNaN(target)) {
+    if (name && !isNaN(target)) {
         data.goals.unshift({ id: Date.now(), name, target, saved });
         saveData();
         closeModal('goalModal');
@@ -456,7 +456,7 @@ function saveRecurring() {
     const name = document.getElementById('recName').value;
     const amt = parseFloat(document.getElementById('recAmt').value);
     const date = document.getElementById('recDate').value;
-    if(name && !isNaN(amt)) {
+    if (name && !isNaN(amt)) {
         data.recurring.unshift({ id: Date.now(), name, amt, date });
         saveData();
         closeModal('recModal');
@@ -470,7 +470,7 @@ function saveLoan() {
     const amt = parseFloat(document.getElementById('loanAmt').value);
     const type = document.getElementById('loanType').value;
     const date = document.getElementById('loanDate').value;
-    if(person && !isNaN(amt)) {
+    if (person && !isNaN(amt)) {
         data.loans.unshift({ id: Date.now(), person, name, amt, type, date });
         saveData();
         closeModal('loanModal');
@@ -482,7 +482,7 @@ function renderProfile() {
     if (!data.profile) data.profile = {};
     const name = data.profile.name || (currentUser ? currentUser.name : 'User');
     const email = data.profile.email || (currentUser ? currentUser.email : '');
-    
+
     const nameInput = document.getElementById('profName');
     const emailInput = document.getElementById('profEmail');
     const phoneInput = document.getElementById('profPhone');
@@ -490,7 +490,7 @@ function renderProfile() {
     if (nameInput) nameInput.value = name;
     if (emailInput) emailInput.value = email;
     if (phoneInput) phoneInput.value = data.profile.phone || '';
-    
+
     const display = document.getElementById('profileDisplay');
     if (display) {
         if (data.profile.avatar) {
@@ -563,13 +563,13 @@ function renderAll() {
     renderProfile();
 }
 
-function openModal(id) { 
+function openModal(id) {
     const el = document.getElementById(id);
     if (el) el.style.display = 'flex';
 }
-function closeModal(id) { 
+function closeModal(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = 'none'; 
+    if (el) el.style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', () => {

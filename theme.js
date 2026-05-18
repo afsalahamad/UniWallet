@@ -13,13 +13,13 @@ function initTheme() {
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
+
     if (newTheme === 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
     } else {
         document.documentElement.removeAttribute('data-theme');
     }
-    
+
     localStorage.setItem(THEME_KEY, newTheme);
     updateThemeIcon();
 }

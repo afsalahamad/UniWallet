@@ -28,8 +28,15 @@
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
     }
 
     .feature-list {
@@ -54,31 +61,42 @@
     }
 
     .pulse-btn {
-        animation: pulse 2s infinite;
-        background: var(--accent);
-        border: none;
-        color: white;
-        padding: 1.2rem;
-        border-radius: var(--radius-sm);
-        font-weight: 800;
-        font-family: var(--font-heading);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        cursor: pointer;
-        transition: 0.3s;
-        width: 100%;
-        box-shadow: 0 0 20px var(--accent-glow);
+      animation: pulse 2s infinite;
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 1.2rem;
+      border-radius: var(--radius-sm);
+      font-weight: 800;
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      box-shadow: 0 0 20px var(--accent-glow);
     }
 
     @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0.4); }
-        70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0); }
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0.4);
+      }
+
+      70% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 15px rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0);
+      }
     }
 
     .pulse-btn:hover {
-        transform: scale(1.05);
-        filter: brightness(1.1);
+      transform: scale(1.05);
+      filter: brightness(1.1);
     }
   </style>
 </head>
@@ -122,17 +140,17 @@
 
   <script>
     function tryGuestLogin() {
-        console.log("Button clicked. Attempting guest login...");
-        if (typeof guestLogin === 'function') {
-            guestLogin();
-        } else {
-            console.error("guestLogin function not found in auth.js!");
-            // Fallback emergency login
-            const guestUser = { id: 'guest', name: 'Guest Explorer', email: 'guest@uniwallet.com', isGuest: true };
-            localStorage.setItem('uniwallet_session', JSON.stringify(guestUser));
-            sessionStorage.setItem('uniwallet_show_welcome', 'true');
-            window.location.href = 'index.html';
-        }
+      console.log("Button clicked. Attempting guest login...");
+      if (typeof guestLogin === 'function') {
+        guestLogin();
+      } else {
+        console.error("guestLogin function not found in auth.js!");
+        // Fallback emergency login
+        const guestUser = { id: 'guest', name: 'Guest Explorer', email: 'guest@uniwallet.com', isGuest: true };
+        localStorage.setItem('uniwallet_session', JSON.stringify(guestUser));
+        sessionStorage.setItem('uniwallet_show_welcome', 'true');
+        window.location.href = 'index.html';
+      }
     }
 
     redirectIfLoggedIn();

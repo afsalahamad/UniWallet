@@ -22,7 +22,7 @@ function saveUsers(users) {
 // Signup Logic
 function signup(event) {
     event.preventDefault();
-    
+
     const name = document.getElementById('signupName').value.trim();
     const email = document.getElementById('signupEmail').value.trim();
     const password = document.getElementById('signupPassword').value;
@@ -33,7 +33,7 @@ function signup(event) {
     }
 
     const users = getUsers();
-    
+
     // Check if user already exists
     if (users.find(u => u.email === email)) {
         showAuthError('An account with this email already exists.');
@@ -58,7 +58,7 @@ function signup(event) {
 // Login Logic
 function login(event) {
     event.preventDefault();
-    
+
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
 

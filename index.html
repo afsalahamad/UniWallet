@@ -103,23 +103,6 @@
     <!-- OVERVIEW PAGE -->
     <div id="page-overview" class="page active">
       <div class="bento-grid">
-        <div class="bento-card grid-w-2 grid-h-2">
-          <div class="card-label">Total Balance</div>
-          <div class="card-value" id="totalLeft" style="color: var(--accent); font-size: 3rem;">Rs 0.00</div>
-          <div class="chart-container" id="spendingChart"></div>
-        </div>
-        <div class="bento-card">
-          <div class="card-label">Income</div>
-          <div class="card-value" id="totalIncome" style="color: hsl(var(--green)); font-size: 1.5rem;">Rs 0.00</div>
-        </div>
-        <div class="bento-card">
-          <div class="card-label">Spent</div>
-          <div class="card-value" id="totalSpent" style="color: hsl(var(--red)); font-size: 1.5rem;">Rs 0.00</div>
-        </div>
-        <div class="bento-card grid-h-2">
-          <div class="card-label">Smart Insights</div>
-          <div id="quickInsights" style="margin-top: 1rem;"></div>
-        </div>
         <div class="bento-card grid-w-3">
           <div class="card-label">Quick Log</div>
           <div class="type-tabs" style="margin-top: 1rem;">
@@ -141,6 +124,25 @@
             <button class="btn-solar" onclick="addTransaction()">Post</button>
           </div>
         </div>
+        <div class="bento-card grid-w-2 grid-h-2">
+          <div class="card-label">Total Balance</div>
+          <div class="card-value" id="totalLeft" style="color: var(--accent); font-size: 3rem;">Rs 0.00</div>
+          <div class="chart-container" id="spendingChart"></div>
+        </div>
+
+        <div class="bento-card">
+          <div class="card-label">Income</div>
+          <div class="card-value" id="totalIncome" style="color: hsl(var(--green)); font-size: 1.5rem;">Rs 0.00</div>
+        </div>
+        <div class="bento-card">
+          <div class="card-label">Spent</div>
+          <div class="card-value" id="totalSpent" style="color: hsl(var(--red)); font-size: 1.5rem;">Rs 0.00</div>
+        </div>
+        <div class="bento-card grid-h-2">
+          <div class="card-label">Smart Insights</div>
+          <div id="quickInsights" style="margin-top: 1rem;"></div>
+        </div>
+
       </div>
 
       <div style="margin-top: 3rem;">
@@ -457,7 +459,8 @@
           <li style="margin-bottom: 0.8rem;">✨ <strong>Quick Log:</strong> Use the tabs to switch between
             Income/Expense.</li>
           <li style="margin-bottom: 0.8rem;">🧹 <strong>Clean Slate:</strong> Want to reset? Go to
-            <strong>Profile</strong> and use the <strong>Clear Local Data</strong> button.</li>
+            <strong>Profile</strong> and use the <strong>Clear Local Data</strong> button.
+          </li>
           <li style="margin-bottom: 0.8rem;">🛡️ <strong>Private:</strong> Your data is stored locally on this device
             only.</li>
         </ul>

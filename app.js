@@ -56,6 +56,7 @@ let data = {
 };
 
 let txType = 'expense';
+let activeGoalDepositId = null;
 const DATA_KEY = currentUser ? ('uniwallet_data_' + currentUser.id) : null;
 
 const CATS = {
@@ -140,6 +141,30 @@ function showPage(name) {
         document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(btn => {
             if (btn.onclick && btn.onclick.toString().includes(name)) btn.classList.add('active');
         });
+
+        const pageTitles = {
+            overview: 'Dashboard',
+            budget: 'Budget Planner',
+            savings: 'Financial Goals',
+            recurring: 'Subscriptions & Bills',
+            loans: 'Loans & Debt',
+            history: 'Transaction History',
+            guide: 'System Guide',
+            profile: 'Identity & Settings'
+        };
+        const mobileTitleEl = document.getElementById('mobilePageTitle');
+        if (mobileTitleEl && pageTitles[name]) {
+            mobileTitleEl.textContent = pageTitles[name];
+        }
+
+        const appHeader = document.querySelector('.app-header');
+        if (appHeader) {
+            if (name === 'overview') {
+                appHeader.classList.remove('non-overview-header');
+            } else {
+                appHeader.classList.add('non-overview-header');
+            }
+        }
 
         if (name === 'overview') renderAll();
         else if (name === 'budget') renderBudget();
@@ -307,24 +332,72 @@ function renderGoals() {
         return;
     }
     grid.innerHTML = data.goals.map(g => {
-        const pct = Math.min(100, (g.saved / g.target) * 100);
+        const safeTarget = Math.max(1, parseFloat(g.target) || 0);
+        const safeSaved = Math.max(0, parseFloat(g.saved) || 0);
+        const rawPct = (safeSaved / safeTarget) * 100;
+        const pct = Math.min(100, rawPct);
+        const isComplete = safeSaved >= safeTarget;
+
         return `
             <div class="bento-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div class="card-label">SAVINGS GOAL</div>
+                    <div class="card-label" style="color:${isComplete ? 'var(--success)' : 'var(--text-secondary)'}">${isComplete ? '🎉 GOAL ACHIEVED' : 'SAVINGS GOAL'}</div>
                     <button class="tx-delete-btn" onclick="deleteGoal(${g.id})" title="Remove goal">✕</button>
                 </div>
                 <div style="font-size:1.1rem; font-weight:700; margin-top:0.6rem; color:var(--text-primary);">${g.name}</div>
-                <div class="card-value" style="font-size:1.6rem; color:var(--primary);">${fmt(g.saved)}</div>
-                <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.25rem;">Target Amount: ${fmt(g.target)}</div>
+                <div class="card-value" style="font-size:1.6rem; color:${isComplete ? 'var(--success)' : 'var(--primary)'};">${fmt(safeSaved)}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.25rem;">Target Amount: ${fmt(safeTarget)}</div>
                 <div style="margin-top:1.25rem; height:8px; background:var(--bg-input); border-radius:10px; overflow:hidden; border:1px solid var(--border-color);">
-                    <div style="width:${pct}%; height:100%; background:var(--primary); border-radius:10px; transition: width 0.4s ease;"></div>
+                    <div style="width:${pct}%; height:100%; background:${isComplete ? 'var(--success)' : 'var(--primary)'}; border-radius:10px; transition: width 0.4s ease;"></div>
                 </div>
-                <div style="font-size:0.7rem; margin-top:0.5rem; text-align:right; font-weight:700; color:var(--text-secondary);">${Math.round(pct)}% Saved</div>
+                <div style="font-size:0.7rem; margin-top:0.5rem; text-align:right; font-weight:700; color:var(--text-secondary);">${Math.round(rawPct)}% Saved</div>
+                <div style="margin-top:1.15rem;">
+                    <button class="btn-solar" style="width:100%; padding:0.55rem; font-size:0.8rem;" onclick="depositToGoal(${g.id})">+ Add Money</button>
+                </div>
             </div>
         `;
     }).join('');
     refreshIcons();
+}
+
+function depositToGoal(id) {
+    activeGoalDepositId = id;
+    const goal = data.goals.find(g => g.id === id);
+    const errEl = document.getElementById('goalDepositError');
+    const amtEl = document.getElementById('goalDepositAmt');
+    
+    if (errEl) errEl.style.display = 'none';
+    if (amtEl) amtEl.value = '';
+    
+    openModal('goalDepositModal');
+    setTimeout(() => {
+        if (amtEl) amtEl.focus();
+    }, 150);
+}
+
+function saveGoalDeposit() {
+    if (!activeGoalDepositId) return;
+    const goal = data.goals.find(g => g.id === activeGoalDepositId);
+    if (!goal) return;
+
+    const amtEl = document.getElementById('goalDepositAmt');
+    const errEl = document.getElementById('goalDepositError');
+    const amt = parseFloat(amtEl ? amtEl.value : 0);
+
+    if (isNaN(amt) || amt <= 0) {
+        if (errEl) {
+            errEl.textContent = "Please enter a valid amount greater than 0.";
+            errEl.style.display = 'block';
+        }
+        return;
+    }
+
+    goal.saved = Math.max(0, (parseFloat(goal.saved) || 0) + amt);
+    saveData();
+    closeModal('goalDepositModal');
+    renderGoals();
+    showToast(`Added ${fmt(amt)} to ${goal.name}!`);
+    activeGoalDepositId = null;
 }
 
 function deleteGoal(id) {
@@ -490,12 +563,16 @@ function saveBudget() {
 function saveGoal() {
     const name = document.getElementById('goalName').value;
     const target = parseFloat(document.getElementById('goalTarget').value);
-    const saved = parseFloat(document.getElementById('goalSaved').value) || 0;
-    if (name && !isNaN(target)) {
-        data.goals.unshift({ id: Date.now(), name, target, saved });
+    if (name && !isNaN(target) && target > 0) {
+        data.goals.unshift({ id: Date.now(), name, target, saved: 0 });
         saveData();
+        document.getElementById('goalName').value = '';
+        document.getElementById('goalTarget').value = '';
         closeModal('goalModal');
         renderGoals();
+        showToast("Savings Goal Created!");
+    } else {
+        showToast("Please enter a valid title and target amount.");
     }
 }
 
@@ -673,4 +750,14 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.removeItem('uniwallet_show_welcome');
     }
     refreshIcons();
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeModal('goalDepositModal');
+        closeModal('goalModal');
+        closeModal('budgetModal');
+        closeModal('recModal');
+        closeModal('loanModal');
+    }
 });

@@ -258,6 +258,10 @@ body {
   letter-spacing: -0.02em;
 }
 
+.mobile-page-title {
+  display: none;
+}
+
 .header-subtitle {
   font-size: 0.875rem;
   color: var(--text-secondary);
@@ -350,6 +354,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Desktop Section Headers */
+.portal-header-row,
+.recent-tx-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.recent-tx-header-row {
+  margin-bottom: 1.25rem;
 }
 
 /* --- Hero Balance Section --- */
@@ -953,9 +970,22 @@ input::-webkit-inner-spin-button {
   .app-header {
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 1rem !important;
+    gap: 0.85rem !important;
     margin-bottom: 1.25rem !important;
     padding-bottom: 1rem !important;
+  }
+
+  /* Header Greeting on Home vs Compact Title on Portals */
+  .app-header.non-overview-header #headerGreeting,
+  .app-header.non-overview-header #headerSubtitle {
+    display: none !important;
+  }
+
+  .app-header.non-overview-header #mobilePageTitle {
+    display: block !important;
+    font-size: 1.45rem !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
   }
 
   .header-greeting-group h1 {
@@ -980,6 +1010,39 @@ input::-webkit-inner-spin-button {
 
   .clock-badge {
     display: none !important; /* Hide clock on mobile for compact header */
+  }
+
+  /* Mobile Section Headers & Stacked Buttons */
+  .portal-header-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.85rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .portal-header-row .btn-solar {
+    width: 100% !important;
+    min-height: 48px !important;
+    font-size: 0.9rem !important;
+    margin-top: 0.25rem;
+  }
+
+  .portal-search-wrapper {
+    width: 100% !important;
+  }
+
+  /* Mobile Recent Transactions Search Stacking */
+  .recent-tx-header-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.85rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .tx-search-mobile {
+    width: 100% !important;
+    min-height: 48px !important;
+    font-size: 0.9rem !important;
   }
 
   /* Mobile Hero Balance Card */

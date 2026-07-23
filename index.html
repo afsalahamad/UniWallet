@@ -95,7 +95,8 @@
     <header class="app-header">
       <div class="header-greeting-group">
         <h1 id="headerGreeting">Good Evening, <span id="headerUserName">User</span> 👋</h1>
-        <p class="header-subtitle">Track your university finances smarter.</p>
+        <h1 id="mobilePageTitle" class="mobile-page-title">Dashboard</h1>
+        <p class="header-subtitle" id="headerSubtitle">Track your university finances smarter.</p>
       </div>
 
       <div class="header-right-actions">
@@ -229,14 +230,12 @@
 
       <!-- Recent Transactions Section -->
       <div style="margin-top: 2.25rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div class="recent-tx-header-row">
           <div>
             <h2 style="font-size: 1.3rem; font-weight: 700;">Recent Transactions</h2>
-            <p style="font-size: 0.8rem; color: var(--text-secondary);">Real-time audit log of active spending and
-              deposits.</p>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Real-time audit log of active spending and deposits.</p>
           </div>
-          <input class="form-input-solar" id="txSearch" placeholder="Search entries..." oninput="renderTransactions()"
-            style="width: 240px;" />
+          <input class="form-input-solar tx-search-mobile" id="txSearch" placeholder="Search Transactions..." oninput="renderTransactions()" />
         </div>
         <div id="txList"></div>
       </div>
@@ -244,11 +243,10 @@
 
     <!-- PORTALS -->
     <div id="page-budget" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div class="portal-header-row">
         <div>
           <h2 style="font-size: 1.4rem; font-weight: 700;">Budget Planner</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Set category spending boundaries and avoid
-            overspending.</p>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Set category spending boundaries and avoid overspending.</p>
         </div>
         <button class="btn-solar" onclick="openModal('budgetModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> Add Budget
@@ -258,11 +256,10 @@
     </div>
 
     <div id="page-savings" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div class="portal-header-row">
         <div>
           <h2 style="font-size: 1.4rem; font-weight: 700;">Financial Savings Goals</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Track savings goals for laptops, books, or
-            semester fees.</p>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Track savings goals for laptops, books, or semester fees.</p>
         </div>
         <button class="btn-solar" onclick="openModal('goalModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> Create Goal
@@ -272,11 +269,10 @@
     </div>
 
     <div id="page-recurring" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div class="portal-header-row">
         <div>
           <h2 style="font-size: 1.4rem; font-weight: 700;">Subscriptions & Recurring Bills</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage regular monthly payments and digital
-            subscriptions.</p>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage regular monthly payments and digital subscriptions.</p>
         </div>
         <button class="btn-solar" onclick="openModal('recModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> Add Subscription
@@ -286,7 +282,7 @@
     </div>
 
     <div id="page-loans" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div class="portal-header-row">
         <div>
           <h2 style="font-size: 1.4rem; font-weight: 700;">Loans & Debt Management</h2>
           <p style="font-size: 0.85rem; color: var(--text-secondary);">Audit record of payables and receivables with peers.</p>
@@ -299,26 +295,23 @@
     </div>
 
     <div id="page-history" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div class="portal-header-row">
         <div>
           <h2 style="font-size: 1.4rem; font-weight: 700;">Transaction Audit History</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Full searchable database of your entire
-            transaction timeline.</p>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Full searchable database of your entire transaction timeline.</p>
         </div>
-        <div style="width:260px;">
-          <input type="text" id="historySearch" class="form-input-solar" placeholder="Filter history..."
-            oninput="renderTransactions()" />
+        <div style="width:260px;" class="portal-search-wrapper">
+          <input type="text" id="historySearch" class="form-input-solar tx-search-mobile" placeholder="Filter history..." oninput="renderTransactions()" />
         </div>
       </div>
       <div id="historyTxList"></div>
     </div>
 
     <div id="page-guide" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div class="portal-header-row">
         <div>
           <h2 style="font-size: 1.4rem; font-weight: 700;">System Onboarding Guide</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Learn how to maximize your UniWallet setup in 5
-            steps.</p>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Learn how to maximize your UniWallet setup in 5 steps.</p>
         </div>
         <div class="pill">SaaS Master Edition</div>
       </div>
@@ -328,8 +321,7 @@
           <div class="card-label" style="color:var(--primary)">STEP 01</div>
           <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Secure Your Identity</div>
           <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
-            Navigate to <strong>Identity Settings</strong> in the sidebar. Upload a photo and customize your student
-            profile.
+            Navigate to <strong>Identity Settings</strong> in the sidebar. Upload a photo and customize your student profile.
           </p>
         </div>
 
@@ -345,8 +337,7 @@
           <div class="card-label" style="color:var(--primary)">STEP 03</div>
           <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Set Budget Limits</div>
           <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
-            In the <strong>Budgeting</strong> portal, define limits for categories. Visual bars warn you when exceeding
-            90%.
+            In the <strong>Budgeting</strong> portal, define limits for categories. Visual bars warn you when exceeding 90%.
           </p>
         </div>
 
@@ -354,29 +345,26 @@
           <div class="card-label" style="color:var(--primary)">STEP 04</div>
           <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Track Peer Debts</div>
           <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
-            Log payables and receivables under <strong>Loans & Debt</strong>. Click <strong>Settle Entry</strong>
-            when paid.
+            Log payables and receivables under <strong>Loans & Debt</strong>. Click <strong>Settle Entry</strong> when paid.
           </p>
         </div>
 
         <div class="bento-card grid-w-4">
           <div class="card-label" style="color:var(--primary); justify-content:center;">STEP 05</div>
-          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem; text-align:center;">Monitor Health Score
-          </div>
-          <p
-            style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.6; text-align:center; max-width:780px; margin-left:auto; margin-right:auto;">
-            The <strong>Insights Panel</strong> calculates a dynamic score based on monthly savings. Maintain a score
-            above 70% to stay in optimal student financial health!
+          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem; text-align:center;">Monitor Health Score</div>
+          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.6; text-align:center; max-width:780px; margin-left:auto; margin-right:auto;">
+            The <strong>Insights Panel</strong> calculates a dynamic score based on monthly savings. Maintain a score above 70% to stay in optimal student financial health!
           </p>
         </div>
       </div>
     </div>
 
     <div id="page-profile" class="page">
-      <div style="margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.4rem; font-weight: 700;">Identity & Settings</h2>
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage your profile identity, contact details, and
-          local data persistence.</p>
+      <div class="portal-header-row">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700;">Identity & Settings</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage your profile identity, contact details, and local data persistence.</p>
+        </div>
       </div>
 
       <div class="bento-grid">
@@ -419,8 +407,7 @@
             </div>
             <div style="border-top: 1px solid var(--border-color); padding-top: 1rem;">
               <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
-                Clearing data will permanently reset transactions, budgets, goals, and recurring entries stored in
-                LocalStorage.
+                Clearing data will permanently reset transactions, budgets, goals, and recurring entries stored in LocalStorage.
               </p>
               <button class="danger-btn" style="width: 100%;" onclick="clearAllData()">Clear Local Data</button>
             </div>
@@ -434,8 +421,7 @@
   <div class="modal-overlay" id="budgetModal">
     <div class="modal">
       <h3>Set Category Budget</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Define a
-        spending limit for this category.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Define a spending limit for this category.</p>
       <div>
         <label class="form-label">Category</label>
         <select class="form-input-solar" id="budgetCat">
@@ -462,8 +448,7 @@
   <div class="modal-overlay" id="goalModal">
     <div class="modal">
       <h3>New Savings Goal</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Track target
-        savings for major milestones.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Track target savings for major milestones.</p>
       <div>
         <label class="form-label">Goal Title</label>
         <input class="form-input-solar" id="goalName" placeholder="e.g. Laptop Upgrade" />
@@ -472,10 +457,6 @@
         <label class="form-label">Target Amount (Rs)</label>
         <input class="form-input-solar" id="goalTarget" type="number" placeholder="60000" />
       </div>
-      <div style="margin-top:1rem;">
-        <label class="form-label">Saved so far (Rs)</label>
-        <input class="form-input-solar" id="goalSaved" type="number" placeholder="5000" />
-      </div>
       <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
         <button class="btn-solar" style="flex:1" onclick="saveGoal()">Create Goal</button>
         <button class="btn-solar outline" style="flex:1" onclick="closeModal('goalModal')">Cancel</button>
@@ -483,11 +464,27 @@
     </div>
   </div>
 
+  <!-- CUSTOM DEPOSIT MODAL FOR ADD MONEY -->
+  <div class="modal-overlay" id="goalDepositModal" onclick="if(event.target===this) closeModal('goalDepositModal')">
+    <div class="modal">
+      <h3>💰 Add Money to Savings Goal</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.25rem;">Enter the amount you want to add to this goal.</p>
+      <div id="goalDepositError" style="display:none; color:var(--danger); font-size:0.85rem; font-weight:600; margin-bottom:1rem; padding:0.6rem 0.85rem; background:var(--danger-bg); border-radius:var(--radius-sm); border:1px solid rgba(239, 68, 68, 0.25);"></div>
+      <div>
+        <label class="form-label">Amount (Rs)</label>
+        <input class="form-input-solar" id="goalDepositAmt" type="number" placeholder="Rs 5,000" min="1" style="min-height:52px;" onkeydown="if(event.key==='Enter') saveGoalDeposit()" />
+      </div>
+      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+        <button class="btn-solar" style="flex:1; min-height:52px;" onclick="saveGoalDeposit()">Add Money</button>
+        <button class="btn-solar outline" style="flex:1; min-height:52px;" onclick="closeModal('goalDepositModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="recModal">
     <div class="modal">
       <h3>Add Subscription</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Record
-        recurring digital services or regular bills.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Record recurring digital services or regular bills.</p>
       <div>
         <label class="form-label">Service Name</label>
         <input class="form-input-solar" id="recName" placeholder="e.g. Spotify / Gym" />
@@ -510,8 +507,7 @@
   <div class="modal-overlay" id="loanModal">
     <div class="modal">
       <h3>Record Loan or Debt</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Keep track of
-        payables and receivables with classmates or friends.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Keep track of payables and receivables with classmates or friends.</p>
       <div>
         <label class="form-label">Person Name</label>
         <input class="form-input-solar" id="loanPerson" placeholder="John Doe" />
@@ -571,25 +567,19 @@
       <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
       <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Welcome to UniWallet!</h2>
       <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
-        Your high-fidelity financial journey begins now. We've credited your account with <strong
-          style="color:var(--primary);">Rs 1,000.00</strong> as an initial balance.
+        Your high-fidelity financial journey begins now. We've credited your account with <strong style="color:var(--primary);">Rs 1,000.00</strong> as an initial balance.
       </p>
 
-      <div
-        style="text-align: left; background: var(--bg-input); padding: 1.25rem; border-radius: var(--radius-md); border:1px solid var(--border-color); margin-bottom: 1.5rem;">
-        <div
-          style="font-size: 0.7rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing:0.05em;">
-          Pro Tips:</div>
+      <div style="text-align: left; background: var(--bg-input); padding: 1.25rem; border-radius: var(--radius-md); border:1px solid var(--border-color); margin-bottom: 1.5rem;">
+        <div style="font-size: 0.7rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing:0.05em;">Pro Tips:</div>
         <ul style="font-size: 0.8rem; color: var(--text-secondary); list-style: none; padding: 0;">
           <li style="margin-bottom: 0.6rem;">⚡ <strong>Quick Log:</strong> Switch between Income/Expense easily.</li>
-          <li style="margin-bottom: 0.6rem;">🧹 <strong>Data Reset:</strong> Reset data anytime via Profile settings.
-          </li>
+          <li style="margin-bottom: 0.6rem;">🧹 <strong>Data Reset:</strong> Reset data anytime via Profile settings.</li>
           <li style="margin-bottom: 0.4rem;">🔒 <strong>Private:</strong> Data stays saved on your local device.</li>
         </ul>
       </div>
 
-      <button class="btn-solar" style="width: 100%; padding: 0.85rem;" onclick="closeModal('welcomeModal')">Get Started
-        Now</button>
+      <button class="btn-solar" style="width: 100%; padding: 0.85rem;" onclick="closeModal('welcomeModal')">Get Started Now</button>
     </div>
   </div>
 </body>

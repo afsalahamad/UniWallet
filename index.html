@@ -106,10 +106,27 @@
             oninput="document.getElementById('txSearch').value = this.value; renderTransactions();" />
         </div>
 
-        <button class="header-action-btn" title="Notifications" onclick="showToast('No new notifications')">
-          <i data-lucide="bell" style="width:18px; height:18px;"></i>
-          <span class="notification-badge"></span>
-        </button>
+        <div style="position:relative;">
+          <button class="header-action-btn" title="Notifications" id="notifBellBtn" onclick="toggleNotificationDrawer(event)">
+            <i data-lucide="bell" style="width:18px; height:18px;"></i>
+            <span class="notification-badge" id="notifBadge" style="display:none;">0</span>
+          </button>
+
+          <!-- NOTIFICATION DRAWER / POPOVER -->
+          <div class="notification-drawer" id="notificationDrawer" style="display:none;" onclick="event.stopPropagation()">
+            <div class="notif-header">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">Notifications</h3>
+                <span id="notifUnreadPill" class="pill" style="font-size:0.7rem; padding:0.15rem 0.5rem;">0 Unread</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
+                <button class="notif-action-link" onclick="markAllNotificationsRead()">Mark all as read</button>
+                <button class="notif-action-link danger" onclick="clearAllNotifications()">Clear all</button>
+              </div>
+            </div>
+            <div class="notif-body" id="notifList"></div>
+          </div>
+        </div>
 
         <button class="header-action-btn" title="Settings" onclick="showPage('profile')">
           <i data-lucide="settings" style="width:18px; height:18px;"></i>
@@ -135,20 +152,15 @@
 
       <!-- DASHBOARD HERO BALANCE SECTION -->
       <div class="hero-balance-card">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div class="hero-top-row">
           <div>
             <div class="card-label">
-              <i data-lucide="shield-check" style="width:14px; height:14px; color:var(--primary);"></i> NET AVAILABLE
-              BALANCE
+              <i data-lucide="shield-check" style="width:14px; height:14px; color:var(--primary);"></i> NET AVAILABLE BALANCE
+              <span class="hero-live-badge">🟢 Live</span>
             </div>
-            <div class="card-value" id="totalLeft"
-              style="color: var(--text-primary); font-size: 2.75rem; margin-top: 0.35rem;">Rs 0.00</div>
-            <div class="hero-live-status">
-              <span class="pill" style="padding:0.15rem 0.5rem; font-size:0.7rem; flex-shrink:0;">Live Vault</span>
-              <span class="hero-live-text">Updated in real-time</span>
-            </div>
+            <div class="card-value hero-main-balance" id="totalLeft">Rs 0.00</div>
           </div>
-          <button class="btn-solar" onclick="openModal('budgetModal')">
+          <button class="btn-solar hero-desktop-btn" onclick="openModal('budgetModal')">
             <i data-lucide="plus" style="width:16px; height:16px;"></i> New Budget
           </button>
         </div>
@@ -186,6 +198,10 @@
             <div id="quickInsights" style="margin-top:0.25rem;"></div>
           </div>
         </div>
+
+        <button class="btn-solar hero-mobile-btn" onclick="openModal('budgetModal')">
+          <i data-lucide="plus" style="width:16px; height:16px;"></i> New Budget
+        </button>
       </div>
 
       <!-- MAIN BENTO GRID & QUICK LOG -->

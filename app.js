@@ -48,6 +48,8 @@ let data = {
     goals: [],
     recurring: [],
     loans: [],
+    notifications: [],
+    notif_keys: {},
     profile: {
         name: currentUser ? (currentUser.name || '') : '',
         phone: '',
@@ -99,6 +101,8 @@ function loadData() {
             if (!data.splits) data.splits = [];
             if (!data.recurring) data.recurring = [];
             if (!data.loans) data.loans = [];
+            if (!data.notifications) data.notifications = [];
+            if (!data.notif_keys) data.notif_keys = {};
             if (!data.profile) data.profile = {};
 
             if (!data.profile.name && currentUser) data.profile.name = currentUser.name || '';
@@ -110,6 +114,8 @@ function loadData() {
         data.transactions = [
             { id: 1, name: 'Initial Balance', amt: 1000, cat: 'other', type: 'income', date: new Date().toISOString().split('T')[0] }
         ];
+        data.notifications = [];
+        data.notif_keys = {};
         saveData();
     }
 }
@@ -127,6 +133,279 @@ function showToast(msg) {
 function refreshIcons() {
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons();
+    }
+}
+
+function timeAgo(isoString) {
+    if (!isoString) return 'Just now';
+    const past = new Date(isoString).getTime();
+    const now = new Date().getTime();
+    const diffSecs = Math.floor((now - past) / 1000);
+
+    if (diffSecs < 45) return 'Just now';
+    const mins = Math.floor(diffSecs / 60);
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return 'Yesterday';
+    if (days < 7) return `${days}d ago`;
+    return new Date(isoString).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// ---- NOTIFICATION SYSTEM ENGINE ----
+function addNotification({ category = 'system', priority = 'normal', title, message, dedup_key = null }) {
+    if (!data.notifications) data.notifications = [];
+    if (!data.notif_keys) data.notif_keys = {};
+
+    if (dedup_key && data.notif_keys[dedup_key]) {
+        return; // Skip duplicate notification
+    }
+
+    const item = {
+        id: 'notif_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        dedup_key,
+        category,
+        priority,
+        title,
+        message,
+        read: false,
+        created_at: new Date().toISOString()
+    };
+
+    data.notifications.unshift(item);
+    if (dedup_key) data.notif_keys[dedup_key] = true;
+
+    saveData();
+    renderNotifications();
+}
+
+function checkAutomatedNotifications() {
+    const now = new Date();
+    const curYearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const todayStr = now.toISOString().split('T')[0];
+
+    // 1. Monthly Rollover Notification
+    const rolloverKey = `month_rollover_${curYearMonth}`;
+    if (!data.notif_keys[rolloverKey]) {
+        addNotification({
+            category: 'system',
+            priority: 'normal',
+            title: `Welcome to ${now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}!`,
+            message: 'Your monthly financial summary and spend counters have reset for the new month.',
+            dedup_key: rolloverKey
+        });
+    }
+
+    // 2. Budget Usage Milestones
+    const monthlyTxs = getMonthlyTransactions().filter(t => t.type === 'expense');
+    const catTotals = {};
+    monthlyTxs.forEach(t => catTotals[t.cat] = (catTotals[t.cat] || 0) + t.amt);
+
+    Object.entries(data.budgets || {}).forEach(([cat, limit]) => {
+        if (!limit || limit <= 0) return;
+        const spent = catTotals[cat] || 0;
+        const pct = (spent / limit) * 100;
+        const catName = CATS[cat] ? CATS[cat].label : cat;
+
+        if (pct >= 100) {
+            const key100 = `budget_${cat}_100_${curYearMonth}`;
+            if (!data.notif_keys[key100]) {
+                addNotification({
+                    category: 'budgets',
+                    priority: 'critical',
+                    title: `🚨 Budget Exceeded: ${catName}`,
+                    message: `You have spent ${fmt(spent)} of your ${fmt(limit)} budget limit (${Math.round(pct)}%).`,
+                    dedup_key: key100
+                });
+            }
+        } else if (pct >= 80) {
+            const key80 = `budget_${cat}_80_${curYearMonth}`;
+            if (!data.notif_keys[key80]) {
+                addNotification({
+                    category: 'budgets',
+                    priority: 'high',
+                    title: `⚠️ Budget Warning: ${catName}`,
+                    message: `You have reached ${Math.round(pct)}% of your ${catName} monthly budget limit.`,
+                    dedup_key: key80
+                });
+            }
+        } else if (pct >= 50) {
+            const key50 = `budget_${cat}_50_${curYearMonth}`;
+            if (!data.notif_keys[key50]) {
+                addNotification({
+                    category: 'budgets',
+                    priority: 'low',
+                    title: `📊 Budget Update: ${catName}`,
+                    message: `You have used 50% of your ${catName} monthly budget limit.`,
+                    dedup_key: key50
+                });
+            }
+        }
+    });
+
+    // 3. Savings Goal Milestones
+    (data.goals || []).forEach(g => {
+        const safeTarget = Math.max(1, parseFloat(g.target) || 0);
+        const safeSaved = Math.max(0, parseFloat(g.saved) || 0);
+        const pct = (safeSaved / safeTarget) * 100;
+
+        if (pct >= 100) {
+            const goalKey100 = `goal_${g.id}_100`;
+            if (!data.notif_keys[goalKey100]) {
+                addNotification({
+                    category: 'goals',
+                    priority: 'high',
+                    title: `🎉 Savings Goal Achieved!`,
+                    message: `Congratulations! You have reached 100% of your "${g.name}" target (${fmt(safeSaved)}).`,
+                    dedup_key: goalKey100
+                });
+            }
+        } else if (pct >= 75) {
+            const goalKey75 = `goal_${g.id}_75`;
+            if (!data.notif_keys[goalKey75]) {
+                addNotification({
+                    category: 'goals',
+                    priority: 'normal',
+                    title: `🎯 Goal Milestone: ${g.name}`,
+                    message: `You have saved 75% (${fmt(safeSaved)}) toward your "${g.name}" goal.`,
+                    dedup_key: goalKey75
+                });
+            }
+        } else if (pct >= 50) {
+            const goalKey50 = `goal_${g.id}_50`;
+            if (!data.notif_keys[goalKey50]) {
+                addNotification({
+                    category: 'goals',
+                    priority: 'normal',
+                    title: `🎯 Halfway There: ${g.name}`,
+                    message: `You have reached 50% (${fmt(safeSaved)}) of your "${g.name}" goal target.`,
+                    dedup_key: goalKey50
+                });
+            }
+        }
+    });
+
+    // 4. Bills & Subscriptions Due Check
+    (data.recurring || []).forEach(r => {
+        if (!r.date) return;
+        const dueDays = Math.ceil((new Date(r.date) - now) / (1000 * 60 * 60 * 24));
+        if (dueDays <= 3 && dueDays >= 0) {
+            const billKey = `bill_due_${r.id}_${r.date}`;
+            if (!data.notif_keys[billKey]) {
+                addNotification({
+                    category: 'bills',
+                    priority: dueDays <= 1 ? 'critical' : 'high',
+                    title: `💳 Upcoming Bill: ${r.name}`,
+                    message: `Your ${r.name} subscription (${fmt(r.amt)}) is due in ${dueDays === 0 ? 'today' : dueDays + ' days'}.`,
+                    dedup_key: billKey
+                });
+            }
+        }
+    });
+
+    // 5. Payables & Receivables Due Check
+    (data.loans || []).forEach(l => {
+        if (!l.date) return;
+        const dueDays = Math.ceil((new Date(l.date) - now) / (1000 * 60 * 60 * 24));
+        const isDebt = l.type === 'debt';
+        const termLabel = isDebt ? 'Payable' : 'Receivable';
+
+        if (dueDays <= 3) {
+            const loanKey = `loan_due_${l.id}_${l.date}`;
+            if (!data.notif_keys[loanKey]) {
+                addNotification({
+                    category: 'loans',
+                    priority: dueDays < 0 ? 'critical' : 'high',
+                    title: `📑 ${termLabel} ${dueDays < 0 ? 'Overdue' : 'Reminder'}`,
+                    message: `${l.person}: ${fmt(l.amt)} for ${l.name} is ${dueDays < 0 ? 'overdue' : 'due in ' + dueDays + ' days'}.`,
+                    dedup_key: loanKey
+                });
+            }
+        }
+    });
+
+    renderNotifications();
+}
+
+function renderNotifications() {
+    const listEl = document.getElementById('notifList');
+    const badgeEl = document.getElementById('notifBadge');
+    const pillEl = document.getElementById('notifUnreadPill');
+
+    const notifs = data.notifications || [];
+    const unreadCount = notifs.filter(n => !n.read).length;
+
+    if (badgeEl) {
+        if (unreadCount > 0) {
+            badgeEl.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            badgeEl.style.display = 'flex';
+        } else {
+            badgeEl.style.display = 'none';
+        }
+    }
+
+    if (pillEl) {
+        pillEl.textContent = `${unreadCount} Unread`;
+        pillEl.style.background = unreadCount > 0 ? 'var(--danger-bg)' : 'var(--primary-light)';
+        pillEl.style.color = unreadCount > 0 ? 'var(--danger)' : 'var(--primary)';
+    }
+
+    if (listEl) {
+        if (!notifs.length) {
+            listEl.innerHTML = '<div style="padding:2.5rem 1rem; text-align:center; color:var(--text-secondary); font-size:0.85rem;">No notifications right now.<br/><span style="font-size:0.75rem; color:var(--text-dim);">Automated budget alerts & reminders will appear here.</span></div>';
+            return;
+        }
+
+        listEl.innerHTML = notifs.map(n => `
+            <div class="notif-item ${n.read ? 'read' : 'unread'} ${n.priority || 'normal'}" onclick="markNotificationRead('${n.id}')">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <span class="notif-priority-badge ${n.priority || 'normal'}">${n.priority || 'normal'}</span>
+                    <span style="font-size:0.75rem; color:var(--text-secondary);">${timeAgo(n.created_at)}</span>
+                </div>
+                <div style="font-weight:700; font-size:0.875rem; margin-top:0.35rem; color:var(--text-primary);">${n.title}</div>
+                <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem; line-height:1.4;">${n.message}</div>
+            </div>
+        `).join('');
+    }
+}
+
+function toggleNotificationDrawer(e) {
+    if (e) e.stopPropagation();
+    const drawer = document.getElementById('notificationDrawer');
+    if (!drawer) return;
+    const isVisible = drawer.style.display === 'flex';
+    drawer.style.display = isVisible ? 'none' : 'flex';
+
+    if (!isVisible) {
+        renderNotifications();
+        refreshIcons();
+    }
+}
+
+function markNotificationRead(id) {
+    const item = (data.notifications || []).find(n => n.id === id);
+    if (item) {
+        item.read = true;
+        saveData();
+        renderNotifications();
+    }
+}
+
+function markAllNotificationsRead() {
+    (data.notifications || []).forEach(n => n.read = true);
+    saveData();
+    renderNotifications();
+    showToast("Marked all as read");
+}
+
+function clearAllNotifications() {
+    if (confirm("Clear all notification history?")) {
+        data.notifications = [];
+        data.notif_keys = {};
+        saveData();
+        renderNotifications();
+        showToast("Notifications cleared");
     }
 }
 
@@ -396,6 +675,7 @@ function saveGoalDeposit() {
     saveData();
     closeModal('goalDepositModal');
     renderGoals();
+    checkAutomatedNotifications();
     showToast(`Added ${fmt(amt)} to ${goal.name}!`);
     activeGoalDepositId = null;
 }
@@ -540,6 +820,7 @@ function addTransaction() {
     nameEl.value = '';
     amtEl.value = '';
     renderAll();
+    checkAutomatedNotifications();
     showToast(`${txType.charAt(0).toUpperCase() + txType.slice(1)} added successfully!`);
 }
 
@@ -557,6 +838,7 @@ function saveBudget() {
         saveData();
         closeModal('budgetModal');
         renderBudget();
+        checkAutomatedNotifications();
     }
 }
 
@@ -570,6 +852,7 @@ function saveGoal() {
         document.getElementById('goalTarget').value = '';
         closeModal('goalModal');
         renderGoals();
+        checkAutomatedNotifications();
         showToast("Savings Goal Created!");
     } else {
         showToast("Please enter a valid title and target amount.");
@@ -585,6 +868,7 @@ function saveRecurring() {
         saveData();
         closeModal('recModal');
         renderRecurring();
+        checkAutomatedNotifications();
     }
 }
 
@@ -599,6 +883,7 @@ function saveLoan() {
         saveData();
         closeModal('loanModal');
         renderLoans();
+        checkAutomatedNotifications();
     }
 }
 
@@ -710,7 +995,7 @@ function handleAvatar(input) {
 
 function clearAllData() {
     if (confirm("Delete all UniWallet local data? This action cannot be undone.")) {
-        data = { transactions: [], budgets: {}, splits: [], goals: [], recurring: [], loans: [], profile: {} };
+        data = { transactions: [], budgets: {}, splits: [], goals: [], recurring: [], loans: [], notifications: [], notif_keys: {}, profile: {} };
         saveData();
         location.reload();
     }
@@ -731,6 +1016,7 @@ function renderAll() {
     renderTransactions();
     renderInsights();
     renderProfile();
+    checkAutomatedNotifications();
     refreshIcons();
 }
 
@@ -759,5 +1045,17 @@ document.addEventListener('keydown', (e) => {
         closeModal('budgetModal');
         closeModal('recModal');
         closeModal('loanModal');
+        const drawer = document.getElementById('notificationDrawer');
+        if (drawer) drawer.style.display = 'none';
+    }
+});
+
+document.addEventListener('click', (e) => {
+    const drawer = document.getElementById('notificationDrawer');
+    const bellBtn = document.getElementById('notifBellBtn');
+    if (drawer && drawer.style.display === 'flex') {
+        if (!drawer.contains(e.target) && !bellBtn.contains(e.target)) {
+            drawer.style.display = 'none';
+        }
     }
 });

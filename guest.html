@@ -6,97 +6,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Afsal Ahamad">
   <title>Guest Access — UniWallet</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="theme.js"></script>
   <script src="auth.js"></script>
   <script src="cursor.js"></script>
   <style>
-    body.auth-body {
-      background: radial-gradient(circle at top right, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15), transparent 40%),
-        radial-gradient(circle at bottom left, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1), transparent 40%),
-        hsl(var(--bg-color));
-    }
-
     .guest-icon {
-      font-size: 4rem;
-      margin-bottom: 1.5rem;
-      display: block;
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
       animation: float 3s ease-in-out infinite;
     }
 
     @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     .feature-list {
       text-align: left;
-      margin: 2rem 0;
+      margin: 1.5rem 0;
       padding: 0;
       list-style: none;
     }
 
     .feature-list li {
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
-      font-size: 0.9rem;
+      gap: 0.75rem;
+      font-size: 0.875rem;
       color: var(--text-secondary);
     }
 
     .feature-list li i {
-      color: var(--accent);
-      font-style: normal;
-    }
-
-    .pulse-btn {
-      animation: pulse 2s infinite;
-      background: var(--accent);
-      border: none;
-      color: white;
-      padding: 1.2rem;
-      border-radius: var(--radius-sm);
-      font-weight: 800;
-      font-family: var(--font-heading);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: 0.3s;
-      width: 100%;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0.4);
-      }
-
-      70% {
-        transform: scale(1.02);
-        box-shadow: 0 0 0 15px rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0);
-      }
-
-      100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(var(--accent-h), var(--accent-s), var(--accent-l), 0);
-      }
-    }
-
-    .pulse-btn:hover {
-      transform: scale(1.05);
-      filter: brightness(1.1);
+      color: #60A5FA;
     }
   </style>
 </head>
@@ -104,48 +50,54 @@
 <body class="auth-body">
 
   <button class="theme-toggle-btn" onclick="toggleTheme()"
-    style="position: absolute; top: 2rem; right: 2rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--glass-shadow); z-index: 1000;">🌓</button>
+    style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--card-shadow); z-index: 1000;">
+    <i data-lucide="sun" style="width:18px; height:18px;"></i>
+  </button>
 
   <div class="auth-container">
-    <div class="nav-logo" style="margin-bottom: 3rem; font-size: 2.5rem; text-align: center; color: var(--accent);">
-      Uni<span>Wallet</span></div>
+    <div class="sidebar-logo" style="margin-bottom: 2rem; font-size: 2rem; justify-content: center;">
+      <div class="sidebar-logo-icon" style="width:42px; height:42px;">
+        <i data-lucide="wallet" style="width:22px; height:22px;"></i>
+      </div>
+      Uni<span>Wallet</span>
+    </div>
 
     <div class="auth-card" style="text-align: center;">
       <span class="guest-icon">🎭</span>
       <h1 class="auth-title">Guest Explorer</h1>
-      <p class="auth-subtitle">Try UniWallet without an account.</p>
+      <p class="auth-subtitle">Experience UniWallet instantly without registration.</p>
 
       <ul class="feature-list">
-        <li><i>✔</i> Instant access to all features</li>
-        <li><i>✔</i> No registration required</li>
-        <li><i>✔</i> Data stays on this device only</li>
-        <li><i>✔</i> Perfect for a quick trial</li>
+        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> Instant access to all student finance features</li>
+        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> No registration or email required</li>
+        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> All data stored privately on your browser</li>
+        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> Clean, high-fidelity SaaS dashboard</li>
       </ul>
 
-      <!-- Using a more robust onclick and highlighted class -->
-      <button onclick="tryGuestLogin()" class="pulse-btn" style="margin-bottom: 1.5rem;">
-        Start Exploring Now
+      <button onclick="tryGuestLogin()" class="btn-solar" style="width: 100%; padding: 0.85rem; font-size: 0.95rem; margin-bottom: 1.25rem;">
+        Launch Dashboard Now
       </button>
 
       <div class="auth-footer">
-        Want to save your data forever? <a href="signup.html">Create Account</a>
+        Want to save your data permanently? <a href="signup.html">Create Account</a>
       </div>
     </div>
   </div>
 
   <footer class="footer">
-    &copy; 2026 UniWallet All rights reserved.<br />
+    &copy; 2026 UniWallet. All rights reserved.<br />
     Developed by <strong>Afsal Ahamad</strong>
   </footer>
 
   <script>
+    if (window.lucide) lucide.createIcons();
+
     function tryGuestLogin() {
       console.log("Button clicked. Attempting guest login...");
       if (typeof guestLogin === 'function') {
         guestLogin();
       } else {
         console.error("guestLogin function not found in auth.js!");
-        // Fallback emergency login
         const guestUser = { id: 'guest', name: 'Guest Explorer', email: 'guest@uniwallet.com', isGuest: true };
         localStorage.setItem('uniwallet_session', JSON.stringify(guestUser));
         sessionStorage.setItem('uniwallet_show_welcome', 'true');

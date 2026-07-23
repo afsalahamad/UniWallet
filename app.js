@@ -1,6 +1,6 @@
-// Solaris V2 - Professional Sidebar Dashboard Logic
+// UniWallet V2 - Professional SaaS Dashboard Logic with Lucide Icons Integration
 
-// ---- CLOCK LOGIC (Runs immediately to ensure responsiveness) ----
+// ---- CLOCK & GREETING LOGIC ----
 function startClock() {
     setInterval(() => {
         const timeEl = document.getElementById('currentTime');
@@ -13,6 +13,23 @@ function startClock() {
     }, 1000);
 }
 startClock();
+
+function updateGreeting() {
+    const greetingEl = document.getElementById('headerGreeting');
+    const userSpan = document.getElementById('headerUserName');
+    const name = (data.profile && data.profile.name) ? data.profile.name : (currentUser ? (currentUser.name || 'User') : 'User');
+    
+    if (userSpan) userSpan.textContent = name;
+
+    if (greetingEl) {
+        const hour = new Date().getHours();
+        let timePhrase = "Good Evening";
+        if (hour < 12) timePhrase = "Good Morning";
+        else if (hour < 18) timePhrase = "Good Afternoon";
+        
+        greetingEl.innerHTML = `${timePhrase}, <span id="headerUserName">${name}</span> 👋`;
+    }
+}
 
 // ---- AUTHENTICATION CHECK ----
 const currentUser = typeof requireAuth === 'function' ? requireAuth() : null;
@@ -58,7 +75,14 @@ const CATS = {
 };
 
 function saveData() {
-    if (DATA_KEY) localStorage.setItem(DATA_KEY, JSON.stringify(data));
+    if (DATA_KEY) {
+        try {
+            localStorage.setItem(DATA_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.error("Save error:", e);
+            showToast("Storage quota limit reached.");
+        }
+    }
 }
 
 function loadData() {
@@ -68,7 +92,6 @@ function loadData() {
         try {
             const parsed = JSON.parse(saved);
             data = { ...data, ...parsed };
-            // Ensure mandatory arrays exist
             if (!data.transactions) data.transactions = [];
             if (!data.budgets) data.budgets = {};
             if (!data.goals) data.goals = [];
@@ -77,14 +100,12 @@ function loadData() {
             if (!data.loans) data.loans = [];
             if (!data.profile) data.profile = {};
 
-            // Sync Profile with Signup data if empty
             if (!data.profile.name && currentUser) data.profile.name = currentUser.name || '';
             if (!data.profile.email && currentUser) data.profile.email = currentUser.email || '';
         } catch (e) {
             console.error("Data load error", e);
         }
     } else {
-        // Default demo data for first time
         data.transactions = [
             { id: 1, name: 'Initial Balance', amt: 1000, cat: 'other', type: 'income', date: new Date().toISOString().split('T')[0] }
         ];
@@ -99,7 +120,13 @@ function showToast(msg) {
     const t = document.getElementById('toast');
     if (!t) return;
     t.textContent = msg; t.style.display = 'block';
-    setTimeout(() => { t.style.display = 'none'; }, 2000);
+    setTimeout(() => { t.style.display = 'none'; }, 2200);
+}
+
+function refreshIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+    }
 }
 
 // ---- NAVIGATION ----
@@ -114,10 +141,6 @@ function showPage(name) {
             if (btn.onclick && btn.onclick.toString().includes(name)) btn.classList.add('active');
         });
 
-        const titleEl = document.getElementById('pageTitle');
-        if (titleEl) titleEl.textContent = name.charAt(0).toUpperCase() + name.slice(1);
-
-        // Render current view
         if (name === 'overview') renderAll();
         else if (name === 'budget') renderBudget();
         else if (name === 'savings') renderGoals();
@@ -127,6 +150,23 @@ function showPage(name) {
         else if (name === 'profile') renderProfile();
 
         window.scrollTo(0, 0);
+        refreshIcons();
+    }
+}
+
+function quickLogAction(type) {
+    showPage('overview');
+    const tabs = document.querySelectorAll('.type-tab');
+    if (tabs.length >= 2) {
+        const targetTab = type === 'expense' ? tabs[0] : tabs[1];
+        setTxType(type, targetTab);
+    } else {
+        setTxType(type, null);
+    }
+    const nameEl = document.getElementById('txName');
+    if (nameEl) {
+        nameEl.focus();
+        nameEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
@@ -159,7 +199,7 @@ function renderChart() {
     });
     const totals = days.map(day => data.transactions.filter(t => t.date === day && t.type === 'expense').reduce((s, t) => s + t.amt, 0));
     const max = Math.max(...totals, 500);
-    container.innerHTML = totals.map(v => `<div class="chart-bar" style="height:${(v / max) * 100}%"></div>`).join('');
+    container.innerHTML = totals.map(v => `<div class="chart-bar" style="height:${Math.max(10, (v / max) * 100)}%" title="${fmt(v)}"></div>`).join('');
 }
 
 function renderInsights() {
@@ -170,7 +210,7 @@ function renderInsights() {
     const spent = txs.reduce((s, t) => s + t.amt, 0);
 
     if (!txs.length) {
-        el.innerHTML = '<div style="color:var(--text-dim); font-size:0.75rem; margin-top:1rem;">Waiting for spend data...</div>';
+        el.innerHTML = '<div style="color:var(--text-secondary); font-size:0.8rem; margin-top:0.5rem;">Waiting for spending data...</div>';
         return;
     }
 
@@ -183,16 +223,8 @@ function renderInsights() {
     const health = income > 0 ? Math.round((1 - (spent / income)) * 100) : 100;
 
     el.innerHTML = `
-        <div style="margin-top:0.8rem;">
-            <div style="font-size:0.55rem; color:var(--text-dim); font-weight:700; letter-spacing:1px;">TOP SPEND</div>
-            <div style="font-size:0.85rem; font-weight:700; margin:0.2rem 0;">${catInfo.icon} ${catInfo.label}</div>
-            <div style="color:var(--accent); font-weight:700; font-size:0.75rem;">${fmt(top[1])}</div>
-        </div>
-        <div style="margin-top:1.2rem;">
-            <div style="font-size:0.55rem; color:var(--text-dim); font-weight:700; letter-spacing:1px;">FINANCIAL HEALTH</div>
-            <div style="font-size:1.1rem; font-weight:800; color:${health > 70 ? 'var(--green)' : 'var(--amber)'};">${health}%</div>
-            <div style="font-size:0.65rem; color:var(--text-dim);">${health > 70 ? 'Excellent status' : 'Needs optimization'}</div>
-        </div>
+        <div style="font-size:0.7rem; color:var(--text-secondary); font-weight:600;">Top Spend: <strong style="color:var(--text-primary);">${catInfo.icon} ${catInfo.label}</strong></div>
+        <div style="font-size:0.9rem; font-weight:800; color:${health > 70 ? 'var(--success)' : 'var(--warning)'}; margin-top:0.2rem;">${health}% Financial Health</div>
     `;
 }
 
@@ -205,28 +237,34 @@ function renderTransactions() {
 
     if (dashList) {
         let txs = data.transactions.filter(t => t.name.toLowerCase().includes(dashSearch) || (CATS[t.cat] && CATS[t.cat].label.toLowerCase().includes(dashSearch)));
-        if (!txs.length) dashList.innerHTML = '<div style="padding:1rem; text-align:center; color:var(--text-dim); font-size:0.8rem;">No recent activity.</div>';
+        if (!txs.length) dashList.innerHTML = '<div style="padding:1.5rem; text-align:center; color:var(--text-secondary); font-size:0.85rem; background:var(--bg-card); border-radius:var(--radius-md); border:1px solid var(--border-color);">No recent activity found.</div>';
         else dashList.innerHTML = txs.slice(0, 10).map(t => txItemHTML(t)).join('');
     }
 
     if (histList) {
         let txs = data.transactions.filter(t => t.name.toLowerCase().includes(histSearch) || (CATS[t.cat] && CATS[t.cat].label.toLowerCase().includes(histSearch)));
-        if (!txs.length) histList.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--text-dim);">No transactions found.</div>';
+        if (!txs.length) histList.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--text-secondary); background:var(--bg-card); border-radius:var(--radius-md); border:1px solid var(--border-color);">No transactions match your search query.</div>';
         else histList.innerHTML = txs.map(t => txItemHTML(t)).join('');
     }
+    refreshIcons();
 }
 
 function txItemHTML(t) {
     const catInfo = CATS[t.cat] || CATS.other;
+    const isIncome = t.type === 'income';
     return `
-        <div class="bento-card" style="display:flex; align-items:center; gap:1rem; padding:1rem; margin-bottom:0.8rem; height:auto;">
-            <div style="font-size:1.5rem;">${catInfo.icon}</div>
-            <div style="flex:1;">
-                <div style="font-weight:700;">${t.name}</div>
-                <div style="font-size:0.75rem; color:var(--text-dim);">${catInfo.label} • ${t.date}</div>
+        <div class="tx-item">
+            <div class="tx-icon-wrapper">
+                ${catInfo.icon}
             </div>
-            <div style="font-weight:800; color:${t.type === 'income' ? 'var(--green)' : 'var(--red)'}">${t.type === 'income' ? '+' : '-'}${fmt(t.amt)}</div>
-            <button onclick="deleteTx(${t.id})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+            <div style="flex:1; min-width:0;">
+                <div style="font-weight:600; font-size:0.95rem; color:var(--text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${t.name}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.15rem;">${catInfo.label} • ${t.date}</div>
+            </div>
+            <div style="font-weight:700; font-size:0.95rem; color:${isIncome ? 'var(--success)' : 'var(--danger)'}; text-align:right; margin-right:0.5rem;">
+                ${isIncome ? '+' : '-'}${fmt(t.amt)}
+            </div>
+            <button class="tx-delete-btn" onclick="deleteTx(${t.id})" title="Delete entry">✕</button>
         </div>
     `;
 }
@@ -242,45 +280,51 @@ function renderBudget() {
         const catInfo = CATS[cat] || CATS.other;
         const spent = totals[cat] || 0;
         const pct = Math.min(100, (spent / limit) * 100);
+        const isOver = pct > 90;
         return `
             <div class="bento-card">
-                <div class="card-label">${catInfo.icon} ${catInfo.label}</div>
-                <div class="card-value" style="font-size:1.5rem;">${fmt(spent)}</div>
-                <div style="font-size:0.8rem; color:var(--text-dim); margin-top:0.3rem;">Limit: ${fmt(limit)}</div>
-                <div style="margin-top:1rem; height:6px; background:hsla(0,0%,100%,0.05); border-radius:10px; overflow:hidden;">
-                    <div style="width:${pct}%; height:100%; background:${pct > 90 ? 'var(--red)' : 'var(--accent)'};"></div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="card-label">${catInfo.icon} ${catInfo.label}</div>
+                    <span class="pill" style="background:${isOver ? 'var(--danger-bg)' : 'var(--primary-light)'}; color:${isOver ? 'var(--danger)' : 'var(--primary)'}">${Math.round(pct)}%</span>
+                </div>
+                <div class="card-value" style="font-size:1.6rem; margin-top:0.6rem;">${fmt(spent)}</div>
+                <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.25rem;">Budget Limit: ${fmt(limit)}</div>
+                <div style="margin-top:1.25rem; height:8px; background:var(--bg-input); border-radius:10px; overflow:hidden; border:1px solid var(--border-color);">
+                    <div style="width:${pct}%; height:100%; background:${isOver ? 'var(--danger)' : 'var(--primary)'}; border-radius:10px; transition: width 0.4s ease;"></div>
                 </div>
             </div>
         `;
     }).join('');
-    grid.innerHTML = content || '<div class="bento-card grid-w-4">No budgets set. Click + to add.</div>';
+    grid.innerHTML = content || '<div class="bento-card grid-w-4" style="text-align:center; color:var(--text-secondary); padding:2rem;">No budgets set yet. Click + Add Budget to define spending limits.</div>';
+    refreshIcons();
 }
 
 function renderGoals() {
     const grid = document.getElementById('goalsGrid');
     if (!grid) return;
     if (!data.goals.length) {
-        grid.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No goals tracked yet. Click + to start saving!</div></div>';
+        grid.innerHTML = '<div class="bento-card grid-w-4" style="text-align:center; color:var(--text-secondary); padding:2rem;">No savings goals tracked yet. Click + Create Goal to start!</div>';
         return;
     }
     grid.innerHTML = data.goals.map(g => {
         const pct = Math.min(100, (g.saved / g.target) * 100);
         return `
             <div class="bento-card">
-                <div style="display:flex; justify-content:space-between; align-items:start;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div class="card-label">SAVINGS GOAL</div>
-                    <button onclick="deleteGoal(${g.id})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+                    <button class="tx-delete-btn" onclick="deleteGoal(${g.id})" title="Remove goal">✕</button>
                 </div>
-                <div style="font-size:1.1rem; font-weight:700; margin-top:0.5rem;">${g.name}</div>
-                <div class="card-value" style="font-size:1.6rem; color:var(--accent);">${fmt(g.saved)}</div>
-                <div style="font-size:0.7rem; color:var(--text-dim);">Target: ${fmt(g.target)}</div>
-                <div style="margin-top:1rem; height:4px; background:hsla(0,0%,100%,0.05); border-radius:10px; overflow:hidden;">
-                    <div style="width:${pct}%; height:100%; background:var(--accent); box-shadow: 0 0 10px var(--accent);"></div>
+                <div style="font-size:1.1rem; font-weight:700; margin-top:0.6rem; color:var(--text-primary);">${g.name}</div>
+                <div class="card-value" style="font-size:1.6rem; color:var(--primary);">${fmt(g.saved)}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.25rem;">Target Amount: ${fmt(g.target)}</div>
+                <div style="margin-top:1.25rem; height:8px; background:var(--bg-input); border-radius:10px; overflow:hidden; border:1px solid var(--border-color);">
+                    <div style="width:${pct}%; height:100%; background:var(--primary); border-radius:10px; transition: width 0.4s ease;"></div>
                 </div>
-                <div style="font-size:0.6rem; margin-top:0.4rem; text-align:right; font-weight:700;">${Math.round(pct)}%</div>
+                <div style="font-size:0.7rem; margin-top:0.5rem; text-align:right; font-weight:700; color:var(--text-secondary);">${Math.round(pct)}% Saved</div>
             </div>
         `;
     }).join('');
+    refreshIcons();
 }
 
 function deleteGoal(id) {
@@ -295,24 +339,25 @@ function renderRecurring() {
     const el = document.getElementById('recList');
     if (!el) return;
     if (!data.recurring.length) {
-        el.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No active subscriptions.</div></div>';
+        el.innerHTML = '<div class="bento-card grid-w-4" style="text-align:center; color:var(--text-secondary); padding:2rem;">No active subscriptions. Click + Add Subscription to track bills.</div>';
         return;
     }
     el.innerHTML = data.recurring.map(r => `
         <div class="bento-card">
-            <div style="display:flex; justify-content:space-between; align-items:start;">
-                <div class="card-label">RECURRING BILL</div>
-                <button onclick="deleteRecurring(${r.id})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="card-label">RECURRING SERVICE</div>
+                <button class="tx-delete-btn" onclick="deleteRecurring(${r.id})" title="Remove service">✕</button>
             </div>
-            <div style="font-weight:700; margin-top:0.5rem; font-size:1.1rem;">${r.name}</div>
-            <div class="card-value" style="font-size:1.4rem; color:var(--accent);">${fmt(r.amt)}<span style="font-size:0.7rem; color:var(--text-dim);">/mo</span></div>
-            <div style="font-size:0.75rem; color:var(--text-dim); margin-top:0.3rem;">Next renewal: ${r.date}</div>
-            <div style="display:flex; gap:0.5rem; margin-top:1rem;">
-                <button class="btn-solar" style="flex:2; padding:0.4rem; font-size:0.65rem;" onclick="paySubscription(${r.id})">Pay Now</button>
-                <button class="btn-solar outline" style="flex:1; padding:0.4rem; font-size:0.65rem;" onclick="deleteRecurring(${r.id})">Remove</button>
+            <div style="font-weight:700; margin-top:0.6rem; font-size:1.15rem; color:var(--text-primary);">${r.name}</div>
+            <div class="card-value" style="font-size:1.5rem; color:var(--primary);">${fmt(r.amt)}<span style="font-size:0.75rem; color:var(--text-secondary); font-weight:500;">/mo</span></div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.3rem;">Next renewal: ${r.date || 'N/A'}</div>
+            <div style="display:flex; gap:0.5rem; margin-top:1.25rem;">
+                <button class="btn-solar" style="flex:2; padding:0.5rem; font-size:0.75rem;" onclick="paySubscription(${r.id})">Pay Now</button>
+                <button class="btn-solar outline" style="flex:1; padding:0.5rem; font-size:0.75rem;" onclick="deleteRecurring(${r.id})">Remove</button>
             </div>
         </div>
     `).join('');
+    refreshIcons();
 }
 
 function paySubscription(id) {
@@ -342,25 +387,27 @@ function renderLoans() {
     const el = document.getElementById('loanList');
     if (!el) return;
     if (!data.loans.length) {
-        el.innerHTML = '<div class="bento-card grid-w-4"><div style="color:var(--text-dim); text-align:center;">No active loans or debts.</div></div>';
+        el.innerHTML = '<div class="bento-card grid-w-4" style="text-align:center; color:var(--text-secondary); padding:2rem;">No active Payables or Receivables. Click + Record Entry to track entries.</div>';
         return;
     }
     el.innerHTML = data.loans.map(l => {
         const isDebt = l.type === 'debt';
         return `
             <div class="bento-card">
-                <div style="display:flex; justify-content:space-between; align-items:start;">
-                    <div class="card-label" style="color:${isDebt ? 'var(--red)' : 'var(--green)'}">${isDebt ? '🚨 I OWE' : '💰 OWES ME'}</div>
-                    <button onclick="deleteLoan(${l.id})" style="background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="card-label" style="color:${isDebt ? 'var(--danger)' : 'var(--success)'}">${isDebt ? '🚨 PAYABLES' : '💰 RECEIVABLES'}</div>
+                    <button class="tx-delete-btn" onclick="deleteLoan(${l.id})" title="Delete entry">✕</button>
                 </div>
-                <div style="font-weight:700; margin-top:0.8rem; font-size:1.1rem;">${l.person || 'Unknown'}</div>
-                <div style="font-size:0.7rem; color:var(--text-dim);">${l.name}</div>
-                <div class="card-value" style="font-size:1.6rem; color:${isDebt ? 'var(--red)' : 'var(--green)'}">${fmt(l.amt)}</div>
-                <div style="font-size:0.75rem; color:var(--text-dim); margin-top:0.3rem;">Due: ${l.date || 'No date'}</div>
-                <button class="btn-solar" style="width:100%; margin-top:1rem; padding:0.5rem; font-size:0.7rem;" onclick="deleteLoan(${l.id})">Settle</button>
+                <div style="font-weight:700; margin-top:0.6rem; font-size:1.15rem; color:var(--text-primary);">${l.person || 'Unknown'}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);">${l.name}</div>
+                <div style="font-size:0.7rem; color:var(--text-dim); margin-top:0.2rem;">${isDebt ? 'Money you need to repay.' : 'Money others need to repay to you.'}</div>
+                <div class="card-value" style="font-size:1.6rem; color:${isDebt ? 'var(--danger)' : 'var(--success)'}; margin-top:0.4rem;">${fmt(l.amt)}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.3rem;">Due Date: ${l.date || 'No date'}</div>
+                <button class="btn-solar" style="width:100%; margin-top:1.25rem; padding:0.5rem; font-size:0.75rem; background:${isDebt ? 'var(--danger)' : 'var(--primary)'}" onclick="deleteLoan(${l.id})">Settle Entry</button>
             </div>
         `;
     }).join('');
+    refreshIcons();
 }
 
 function deleteLoan(id) {
@@ -420,7 +467,7 @@ function addTransaction() {
     nameEl.value = '';
     amtEl.value = '';
     renderAll();
-    showToast(`${txType.charAt(0).toUpperCase() + txType.slice(1)} added!`);
+    showToast(`${txType.charAt(0).toUpperCase() + txType.slice(1)} added successfully!`);
 }
 
 function deleteTx(id) {
@@ -496,7 +543,7 @@ function renderProfile() {
         if (data.profile.avatar) {
             display.innerHTML = `<img src="${data.profile.avatar}" alt="Profile" style="width:100%; height:100%; object-fit:cover;" />`;
         } else {
-            display.innerHTML = `<span id="avatarInitial" style="font-size:2rem; font-weight:800; color:var(--accent);">${name.charAt(0).toUpperCase()}</span>`;
+            display.innerHTML = `<span id="avatarInitial" style="font-size:2rem; font-weight:800; color:var(--primary);">${name.charAt(0).toUpperCase()}</span>`;
         }
     }
 
@@ -507,10 +554,11 @@ function renderProfile() {
             fAvatar.innerHTML = `<img src="${data.profile.avatar}" style="width:100%; height:100%; object-fit:cover;" />`;
         } else {
             fAvatar.textContent = name.charAt(0).toUpperCase();
-            fAvatar.style.fontWeight = '800';
+            fAvatar.style.fontWeight = '700';
         }
     }
     if (fName) fName.textContent = name;
+    updateGreeting();
 }
 
 function saveProfile() {
@@ -526,21 +574,65 @@ function saveProfile() {
 }
 
 function handleAvatar(input) {
-    const file = input.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
+    const file = input && input.files && input.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        showToast("Please select a valid image file.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+            // Resize image to max 250x250 for crisp profile avatar with tiny LocalStorage footprint (~20KB)
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 250;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_SIZE) {
+                    height = Math.round((height * MAX_SIZE) / width);
+                    width = MAX_SIZE;
+                }
+            } else {
+                if (height > MAX_SIZE) {
+                    width = Math.round((width * MAX_SIZE) / height);
+                    height = MAX_SIZE;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
             if (!data.profile) data.profile = {};
-            data.profile.avatar = e.target.result;
+            data.profile.avatar = compressedDataUrl;
             saveData();
             renderProfile();
+            showToast("Photo uploaded successfully!");
+            
+            // Reset input value so re-uploading the same file works
+            input.value = '';
         };
-        reader.readAsDataURL(file);
-    }
+        img.onerror = function() {
+            showToast("Failed to process image.");
+        };
+        img.src = e.target.result;
+    };
+    reader.onerror = function() {
+        showToast("Error reading file.");
+    };
+    reader.readAsDataURL(file);
 }
 
 function clearAllData() {
-    if (confirm("Delete all data?")) {
+    if (confirm("Delete all UniWallet local data? This action cannot be undone.")) {
         data = { transactions: [], budgets: {}, splits: [], goals: [], recurring: [], loans: [], profile: {} };
         saveData();
         location.reload();
@@ -556,11 +648,13 @@ function getMonthlyTransactions() {
 }
 
 function renderAll() {
+    updateGreeting();
     updateTotals();
     renderChart();
     renderTransactions();
     renderInsights();
     renderProfile();
+    refreshIcons();
 }
 
 function openModal(id) {
@@ -578,4 +672,5 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal('welcomeModal');
         sessionStorage.removeItem('uniwallet_show_welcome');
     }
+    refreshIcons();
 });

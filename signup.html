@@ -5,131 +5,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Afsal Ahamad">
-  <title>Join UniWallet — Future of Student Finance</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+  <title>Join UniWallet — Student Money Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="theme.js"></script>
   <script src="auth.js"></script>
   <script src="cursor.js"></script>
-  <style>
-    body.auth-body {
-      background: radial-gradient(circle at top right, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.15), transparent 40%),
-        radial-gradient(circle at bottom left, hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1), transparent 40%),
-        hsl(var(--bg-color));
-    }
-
-    .auth-container {
-      perspective: 1000px;
-    }
-
-    .auth-card {
-      backdrop-filter: blur(20px);
-      background: hsla(var(--bg-card), 0.6);
-      border: 1px solid var(--glass-border);
-      transform: translateY(0);
-      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      animation: cardEntry 0.8s ease-out;
-    }
-
-    @keyframes cardEntry {
-      from {
-        opacity: 0;
-        transform: translateY(30px) rotateX(-10deg);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) rotateX(0);
-      }
-    }
-
-    .nav-logo {
-      font-family: var(--font-heading);
-      font-weight: 800;
-      letter-spacing: -2px;
-    }
-
-    .nav-logo span {
-      color: var(--text-dim);
-      font-weight: 400;
-    }
-
-    .form-input {
-      background: hsla(0, 0%, 0%, 0.3) !important;
-      border: 1px solid var(--glass-border) !important;
-      font-family: var(--font-main);
-    }
-
-    .btn-primary {
-      font-family: var(--font-heading);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-size: 0.8rem;
-    }
-
-    .guest-btn {
-      margin-top: 1.5rem;
-      width: 100%;
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 0.8rem;
-      border-radius: var(--radius-sm);
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-      text-decoration: none;
-      display: block;
-      text-align: center;
-      font-size: 0.8rem;
-    }
-
-    .guest-btn:hover {
-      background: var(--accent);
-      color: white;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-  </style>
 </head>
 
 <body class="auth-body">
 
   <button class="theme-toggle-btn" onclick="toggleTheme()"
-    style="position: absolute; top: 2rem; right: 2rem; background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--glass-shadow); z-index: 1000;">🌓</button>
+    style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--card-shadow); z-index: 1000;">
+    <i data-lucide="sun" style="width:18px; height:18px;"></i>
+  </button>
 
   <div class="auth-container">
-    <div class="nav-logo" style="margin-bottom: 3rem; font-size: 2.5rem; text-align: center; color: var(--accent);">
-      Uni<span>Wallet</span></div>
+    <div class="sidebar-logo" style="margin-bottom: 2rem; font-size: 2rem; justify-content: center;">
+      <div class="sidebar-logo-icon" style="width:42px; height:42px;">
+        <i data-lucide="wallet" style="width:22px; height:22px;"></i>
+      </div>
+      Uni<span>Wallet</span>
+    </div>
 
     <div class="auth-card">
-      <h1 class="auth-title">Get Started</h1>
-      <p class="auth-subtitle"></p>
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-subtitle">Start tracking your money smartly today.</p>
 
       <div id="authError" class="auth-error" style="display:none;"></div>
 
       <form onsubmit="signup(event)">
         <div class="form-group">
-          <label class="form-label">Identity / Full Name</label>
-          <input type="text" id="signupName" class="form-input" placeholder="e.g. Kavi Priyan" required />
+          <label class="form-label">Full Name</label>
+          <input type="text" id="signupName" class="form-input" placeholder="e.g. Alex Johnson" required />
         </div>
 
         <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" id="signupEmail" class="form-input" placeholder="example@gmail.com" required />
+          <label class="form-label">University Email</label>
+          <input type="email" id="signupEmail" class="form-input" placeholder="alexjohn.gmail.com" required />
         </div>
 
-        <div class="form-group" style="margin-bottom: 2rem;">
-          <label class="form-label">Secure Password</label>
-          <input type="password" id="signupPassword" class="form-input" placeholder="Create a strong password" required
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label">Security Password</label>
+          <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required
             minlength="6" />
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">Create My Wallet</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create My Wallet</button>
       </form>
-
-      <!-- <a href="guest.html" class="guest-btn">✨ Explore as Guest</a>-->
 
       <div class="auth-footer">
         Already a member? <a href="login.html">Log In</a>
@@ -138,10 +63,12 @@
   </div>
 
   <footer class="footer">
-    &copy; 2026 UniWallet . All rights reserved.<br />
+    &copy; 2026 UniWallet. All rights reserved.<br />
+    Developed by <strong>Afsal Ahamad</strong>
   </footer>
 
   <script>
+    if (window.lucide) lucide.createIcons();
     redirectIfLoggedIn();
   </script>
 </body>

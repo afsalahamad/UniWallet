@@ -5,10 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Afsal Ahamad">
-  <title>UniWallet — Professional Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap"
+  <title>UniWallet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="theme.js"></script>
   <script src="auth.js"></script>
   <style id="initialHide">
@@ -33,123 +34,209 @@
 
 <body>
 
-  <!-- SIDEBAR NAVIGATION -->
+  <!-- SIDEBAR NAVIGATION (Desktop) -->
   <aside class="sidebar">
-    <div class="sidebar-logo">UniWallet</div>
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <i data-lucide="wallet"></i>
+      </div>
+      Uni<span>Wallet</span>
+    </div>
     <nav class="nav-menu">
       <button class="nav-item active" onclick="showPage('overview')">
-        <i>🏠</i> <span>Dashboard</span>
+        <i data-lucide="layout-dashboard"></i> <span>Dashboard</span>
       </button>
       <button class="nav-item" onclick="showPage('budget')">
-        <i>📊</i> <span>Budgeting</span>
+        <i data-lucide="pie-chart"></i> <span>Budgeting</span>
       </button>
       <button class="nav-item" onclick="showPage('savings')">
-        <i>🎯</i> <span>Goals</span>
+        <i data-lucide="target"></i> <span>Goals</span>
       </button>
       <button class="nav-item" onclick="showPage('recurring')">
-        <i>🔄</i> <span>Recurring</span>
+        <i data-lucide="repeat"></i> <span>Subscriptions</span>
       </button>
       <button class="nav-item" onclick="showPage('loans')">
-        <i>💸</i> <span>Loans</span>
+        <i data-lucide="arrow-left-right"></i> <span>Loans & Debt</span>
       </button>
       <button class="nav-item" onclick="showPage('history')">
-        <i>📜</i> <span>History</span>
+        <i data-lucide="history"></i> <span>History</span>
       </button>
       <button class="nav-item" onclick="showPage('guide')">
-        <i>📖</i> <span>Guide</span>
+        <i data-lucide="book-open"></i> <span>Onboarding</span>
       </button>
     </nav>
     <div class="sidebar-footer">
       <div class="nav-item" onclick="showPage('profile')"
-        style="margin-bottom:1rem; cursor:pointer; padding:0.5rem; border-radius:var(--radius-sm); border:1px solid var(--glass-border);">
+        style="margin-bottom:0.5rem; cursor:pointer; padding:0.6rem 0.75rem; border-radius:var(--radius-md); border:1px solid var(--border-color); background: var(--bg-card);">
         <div id="footerAvatar"
-          style="width:32px; height:32px; border-radius:50%; background:var(--bg-card); display:flex; align-items:center; justify-content:center; font-size:0.8rem; overflow:hidden; flex-shrink:0;">
+          style="width:32px; height:32px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; overflow:hidden; flex-shrink:0;">
           👤</div>
         <div style="overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">
-          <div id="footerName" style="font-size:0.8rem; font-weight:700;">User</div>
+          <div id="footerName" style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">User</div>
         </div>
       </div>
-      <button class="nav-item" onclick="toggleTheme()">
-        <i>🌓</i> <span>Theme</span>
+      <button class="nav-item theme-toggle-btn" onclick="toggleTheme()">
+        <i data-lucide="sun"></i> <span>Toggle Theme</span>
       </button>
-      <button class="nav-item" onclick="logout()" style="color: hsl(var(--red));">
-        <i>🚪</i> <span>Logout</span>
+      <button class="nav-item" onclick="logout()" style="color: var(--danger);">
+        <i data-lucide="log-out"></i> <span>Logout</span>
       </button>
 
-      <div style="margin-top: 1.5rem; font-size: 0.6rem; color: var(--text-dim); text-align: center; line-height: 1.4;">
-        &copy; 2026 UniWallet. All rights reserved.<br />
-        Developed by <strong>Afsal Ahamad</strong>
+      <div
+        style="margin-top: 0.85rem; font-size: 0.65rem; color: var(--text-secondary); text-align: center; line-height: 1.4;">
+        &copy; 2026 UniWallet<br />
+        By <strong>Afsal Ahamad</strong>
       </div>
     </div>
   </aside>
 
   <!-- MAIN CONTENT AREA -->
   <main class="main-content">
-    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-      <h1 id="pageTitle" style="font-family: var(--font-heading); font-size: 1.5rem;">Dashboard</h1>
-      <div class="clock-badge"
-        style="display: flex; align-items: center; gap: 0.8rem; background: var(--bg-card); padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);">
-        <div style="font-size: 1.2rem;">🕒</div>
-        <div style="display: flex; flex-direction: column;">
-          <div id="currentTime" style="font-size: 0.9rem; font-weight: 800; color: var(--accent); line-height: 1;">
-            00:00:00</div>
-          <div id="currentDate"
-            style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-top: 0.2rem;">
-            Mon, Jan 01</div>
+    <header class="app-header">
+      <div class="header-greeting-group">
+        <h1 id="headerGreeting">Good Evening, <span id="headerUserName">User</span> 👋</h1>
+        <p class="header-subtitle">Track your university finances smarter.</p>
+      </div>
+
+      <div class="header-right-actions">
+        <div class="header-search-bar">
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--text-secondary);"></i>
+          <input type="text" class="header-search-input" id="globalSearch" placeholder="Search..."
+            oninput="document.getElementById('txSearch').value = this.value; renderTransactions();" />
+        </div>
+
+        <button class="header-action-btn" title="Notifications" onclick="showToast('No new notifications')">
+          <i data-lucide="bell" style="width:18px; height:18px;"></i>
+          <span class="notification-badge"></span>
+        </button>
+
+        <button class="header-action-btn" title="Settings" onclick="showPage('profile')">
+          <i data-lucide="settings" style="width:18px; height:18px;"></i>
+        </button>
+
+        <div class="clock-badge">
+          <div class="clock-badge-icon">
+            <i data-lucide="clock" style="width:16px; height:16px;"></i>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <div id="currentTime" style="font-size: 0.9rem; font-weight: 700; color: var(--primary); line-height: 1;">
+              00:00:00</div>
+            <div id="currentDate"
+              style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-top: 0.2rem;">
+              Mon, Jan 01</div>
+          </div>
         </div>
       </div>
     </header>
 
     <!-- OVERVIEW PAGE -->
     <div id="page-overview" class="page active">
-      <div class="bento-grid">
-        <div class="bento-card grid-w-3">
-          <div class="card-label">Quick Log</div>
-          <div class="type-tabs" style="margin-top: 1rem;">
-            <button class="type-tab active" onclick="setTxType('expense', this)">Expense</button>
-            <button class="type-tab" onclick="setTxType('income', this)">Income</button>
+
+      <!-- DASHBOARD HERO BALANCE SECTION -->
+      <div class="hero-balance-card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div class="card-label">
+              <i data-lucide="shield-check" style="width:14px; height:14px; color:var(--primary);"></i> NET AVAILABLE
+              BALANCE
+            </div>
+            <div class="card-value" id="totalLeft"
+              style="color: var(--text-primary); font-size: 2.75rem; margin-top: 0.35rem;">Rs 0.00</div>
+            <div
+              style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.35rem; display:flex; align-items:center; gap:0.4rem;">
+              <span class="pill" style="padding:0.15rem 0.5rem; font-size:0.7rem;">Live Vault</span> Updated in
+              real-time
+            </div>
           </div>
-          <div class="quick-log-inputs" style="display: flex; gap: 0.8rem; margin-top: 0.5rem;">
-            <input class="form-input-solar" id="txName" placeholder="Description" style="flex: 2;" />
-            <input class="form-input-solar" id="txAmt" type="number" placeholder="Amount" style="flex: 1;" />
-            <select class="form-input-solar" id="txCat" style="flex: 1;">
-              <option value="food">🍜 Food</option>
-              <option value="transport">🚌 Travel</option>
-              <option value="study">📚 Study</option>
-              <option value="entertainment">🎮 Play</option>
-              <option value="health">💊 Health</option>
-              <option value="shopping">🛍️ Shop</option>
-              <option value="other">📦 Other</option>
-            </select>
-            <button class="btn-solar" onclick="addTransaction()">Post</button>
-          </div>
-        </div>
-        <div class="bento-card grid-w-2 grid-h-2">
-          <div class="card-label">Total Balance</div>
-          <div class="card-value" id="totalLeft" style="color: var(--accent); font-size: 3rem;">Rs 0.00</div>
-          <div class="chart-container" id="spendingChart"></div>
+          <button class="btn-solar" onclick="openModal('budgetModal')">
+            <i data-lucide="plus" style="width:16px; height:16px;"></i> New Budget
+          </button>
         </div>
 
-        <div class="bento-card">
-          <div class="card-label">Income</div>
-          <div class="card-value" id="totalIncome" style="color: hsl(var(--green)); font-size: 1.5rem;">Rs 0.00</div>
-        </div>
-        <div class="bento-card">
-          <div class="card-label">Spent</div>
-          <div class="card-value" id="totalSpent" style="color: hsl(var(--red)); font-size: 1.5rem;">Rs 0.00</div>
-        </div>
-        <div class="bento-card grid-h-2">
-          <div class="card-label">Smart Insights</div>
-          <div id="quickInsights" style="margin-top: 1rem;"></div>
-        </div>
+        <div class="hero-stats-grid">
+          <div class="hero-stat-box">
+            <div class="card-label">
+              <i data-lucide="arrow-down-left" style="width:14px; height:14px; color:var(--success);"></i> Monthly
+              Income
+            </div>
+            <div class="card-value" id="totalIncome"
+              style="color: var(--success); font-size: 1.5rem; margin-top: 0.3rem;">Rs 0.00</div>
+          </div>
 
+          <div class="hero-stat-box">
+            <div class="card-label">
+              <i data-lucide="arrow-up-right" style="width:14px; height:14px; color:var(--danger);"></i> Monthly
+              Expenses
+            </div>
+            <div class="card-value" id="totalSpent"
+              style="color: var(--danger); font-size: 1.5rem; margin-top: 0.3rem;">Rs 0.00</div>
+          </div>
+
+          <div class="hero-stat-box">
+            <div class="card-label">
+              <i data-lucide="bar-chart-2" style="width:14px; height:14px; color:var(--primary);"></i> 7-Day Spend Trend
+            </div>
+            <div class="chart-container" id="spendingChart" style="height:40px; margin-top:0.4rem;"></div>
+          </div>
+
+          <div class="hero-stat-box">
+            <div class="card-label">
+              <i data-lucide="sparkles" style="width:14px; height:14px; color:var(--warning);"></i> Financial Insights
+            </div>
+            <div id="quickInsights" style="margin-top:0.25rem;"></div>
+          </div>
+        </div>
       </div>
 
-      <div style="margin-top: 3rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h2 style="font-size: 1.2rem;">Recent Activity</h2>
-          <input class="form-input-solar" id="txSearch" placeholder="Search..." oninput="renderTransactions()"
-            style="width: 200px;" />
+      <!-- MAIN BENTO GRID & QUICK LOG -->
+      <div class="bento-grid">
+        <!-- Quick Transaction Widget -->
+        <div class="bento-card grid-w-4">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="card-label">
+              <i data-lucide="zap" style="width:14px; height:14px; color:var(--primary);"></i> QUICK TRANSACTION LOG
+            </div>
+            <div class="type-tabs">
+              <button class="type-tab active" onclick="setTxType('expense', this)">Expense</button>
+              <button class="type-tab" onclick="setTxType('income', this)">Income</button>
+            </div>
+          </div>
+
+          <div class="quick-log-inputs" style="display: flex; gap: 0.85rem; margin-top: 1rem;">
+            <div style="flex:2; position:relative;">
+              <input class="form-input-solar" id="txName" placeholder="Description (e.g., Books, Lunch)" />
+            </div>
+            <div style="flex:1; position:relative;">
+              <input class="form-input-solar" id="txAmt" type="number" placeholder="Amount (Rs)" />
+            </div>
+            <div style="flex:1; position:relative;">
+              <select class="form-input-solar" id="txCat">
+                <option value="food">🍜 Food</option>
+                <option value="transport">🚌 Travel</option>
+                <option value="study">📚 Study</option>
+                <option value="entertainment">🎮 Play</option>
+                <option value="health">💊 Health</option>
+                <option value="shopping">🛍️ Shop</option>
+                <option value="other">📦 Other</option>
+              </select>
+            </div>
+            <button class="btn-solar" onclick="addTransaction()" style="padding:0.7rem 1.5rem;">
+              <i data-lucide="send" style="width:16px; height:16px;"></i> Post Log
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Transactions Section -->
+      <div style="margin-top: 2.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div>
+            <h2 style="font-size: 1.3rem; font-weight: 700;">Recent Transactions</h2>
+            <p style="font-size: 0.8rem; color: var(--text-secondary);">Real-time audit log of active spending and
+              deposits.</p>
+          </div>
+          <input class="form-input-solar" id="txSearch" placeholder="Search entries..." oninput="renderTransactions()"
+            style="width: 240px;" />
         </div>
         <div id="txList"></div>
       </div>
@@ -157,42 +244,69 @@
 
     <!-- PORTALS -->
     <div id="page-budget" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2 style="font-family:var(--font-heading);">Budget Planner</h2>
-        <button class="btn-solar" onclick="openModal('budgetModal')">+ Add Budget</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700;">Budget Planner</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Set category spending boundaries and avoid
+            overspending.</p>
+        </div>
+        <button class="btn-solar" onclick="openModal('budgetModal')">
+          <i data-lucide="plus" style="width:16px; height:16px;"></i> Add Budget
+        </button>
       </div>
       <div class="bento-grid" id="budgetGrid"></div>
     </div>
 
     <div id="page-savings" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2 style="font-family:var(--font-heading);">Financial Goals</h2>
-        <button class="btn-solar" onclick="openModal('goalModal')">+ Create Goal</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700;">Financial Savings Goals</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Track savings goals for laptops, books, or
+            semester fees.</p>
+        </div>
+        <button class="btn-solar" onclick="openModal('goalModal')">
+          <i data-lucide="plus" style="width:16px; height:16px;"></i> Create Goal
+        </button>
       </div>
       <div class="bento-grid" id="goalsGrid"></div>
     </div>
 
     <div id="page-recurring" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2 style="font-family:var(--font-heading);">Subscriptions</h2>
-        <button class="btn-solar" onclick="openModal('recModal')">+ Add Service</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700;">Subscriptions & Recurring Bills</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage regular monthly payments and digital
+            subscriptions.</p>
+        </div>
+        <button class="btn-solar" onclick="openModal('recModal')">
+          <i data-lucide="plus" style="width:16px; height:16px;"></i> Add Subscription
+        </button>
       </div>
       <div class="bento-grid" id="recList"></div>
     </div>
 
     <div id="page-loans" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2 style="font-family:var(--font-heading);">Loans & Debt</h2>
-        <button class="btn-solar" onclick="openModal('loanModal')">+ Record Debt</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700;">Loans & Debt Management</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Audit record of payables and receivables with peers.</p>
+        </div>
+        <button class="btn-solar" onclick="openModal('loanModal')">
+          <i data-lucide="plus" style="width:16px; height:16px;"></i> Record Entry
+        </button>
       </div>
       <div class="bento-grid" id="loanList"></div>
     </div>
 
     <div id="page-history" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2 style="font-family:var(--font-heading);">Transaction History</h2>
-        <div style="width:250px;">
-          <input type="text" id="historySearch" class="form-input-solar" placeholder="Search transactions..."
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700;">Transaction Audit History</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Full searchable database of your entire
+            transaction timeline.</p>
+        </div>
+        <div style="width:260px;">
+          <input type="text" id="historySearch" class="form-input-solar" placeholder="Filter history..."
             oninput="renderTransactions()" />
         </div>
       </div>
@@ -200,113 +314,113 @@
     </div>
 
     <div id="page-guide" class="page">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2 style="font-family:var(--font-heading);">System Onboarding Guide</h2>
-        <div class="pill">Mastery v2.4</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 700;">System Onboarding Guide</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Learn how to maximize your UniWallet setup in 5
+            steps.</p>
+        </div>
+        <div class="pill">SaaS Master Edition</div>
       </div>
 
       <div class="bento-grid">
-        <!-- Step 1 -->
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--accent)">STEP 01</div>
-          <div style="font-size:1.1rem; font-weight:800; margin-top:0.5rem;">Secure Your Identity</div>
-          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.8rem; line-height:1.5;">
-            Navigate to the <strong>Identity Settings</strong> (bottom of sidebar). Upload a profile photo and verify
-            your name. This personalizes your entire dashboard and secures your local data vault.
+          <div class="card-label" style="color:var(--primary)">STEP 01</div>
+          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Secure Your Identity</div>
+          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
+            Navigate to <strong>Identity Settings</strong> in the sidebar. Upload a photo and customize your student
+            profile.
           </p>
         </div>
 
-        <!-- Step 2 -->
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--accent)">STEP 02</div>
-          <div style="font-size:1.1rem; font-weight:800; margin-top:0.5rem;">Log Daily Transactions</div>
-          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.8rem; line-height:1.5;">
-            Use the <strong>Quick Log</strong> on the dashboard. Switch between <strong>Expense</strong> and
-            <strong>Income</strong> tabs. Select a category, enter the amount, and save. The <strong>Balance
-              Card</strong> updates instantly.
+          <div class="card-label" style="color:var(--primary)">STEP 02</div>
+          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Log Daily Spends</div>
+          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
+            Use the <strong>Quick Log</strong> widget on your dashboard to post daily expenses or income instantly.
           </p>
         </div>
 
-        <!-- Step 3 -->
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--accent)">STEP 03</div>
-          <div style="font-size:1.1rem; font-weight:800; margin-top:0.5rem;">Set Spending Boundaries</div>
-          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.8rem; line-height:1.5;">
-            In the <strong>Budgeting</strong> portal, define limits for categories like 'Food' or 'Entertainment'. The
-            system monitors these in real-time—bars turn <span style="color:var(--red)">Red</span> if you exceed 90%.
+          <div class="card-label" style="color:var(--primary)">STEP 03</div>
+          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Set Budget Limits</div>
+          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
+            In the <strong>Budgeting</strong> portal, define limits for categories. Visual bars warn you when exceeding
+            90%.
           </p>
         </div>
 
-        <!-- Step 4 -->
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--accent)">STEP 04</div>
-          <div style="font-size:1.1rem; font-weight:800; margin-top:0.5rem;">Manage Commitments</div>
-          <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.8rem; line-height:1.5;">
-            Add monthly bills to <strong>Recurring</strong>. Use the <strong>Pay Now</strong> button to officially post
-            them as expenses. Use the <strong>Loans</strong> portal to track who you owe or who owes you—look out for
-            <span style="color:var(--red)">Overdue</span> badges.
+          <div class="card-label" style="color:var(--primary)">STEP 04</div>
+          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Track Peer Debts</div>
+          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
+            Log payables and receivables under <strong>Loans & Debt</strong>. Click <strong>Settle Entry</strong>
+            when paid.
           </p>
         </div>
 
-        <!-- Step 5 -->
         <div class="bento-card grid-w-4">
-          <div class="card-label" style="color:var(--accent)">STEP 05</div>
-          <div style="font-size:1.1rem; font-weight:800; margin-top:0.5rem; text-align:center;">Monitor Your Financial
-            Health</div>
+          <div class="card-label" style="color:var(--primary); justify-content:center;">STEP 05</div>
+          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem; text-align:center;">Monitor Health Score
+          </div>
           <p
-            style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.8rem; line-height:1.6; text-align:center;">
-            The <strong>Insights Panel</strong> on the dashboard calculates a dynamic health score. A score above
-            <strong>70%</strong> indicates excellent financial discipline. Use the <strong>History</strong> portal to
-            audit your full audit trail and search for specific past spends.
+            style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.6; text-align:center; max-width:780px; margin-left:auto; margin-right:auto;">
+            The <strong>Insights Panel</strong> calculates a dynamic score based on monthly savings. Maintain a score
+            above 70% to stay in optimal student financial health!
           </p>
         </div>
       </div>
     </div>
 
     <div id="page-profile" class="page">
-      <h2 style="font-family:var(--font-heading); margin-bottom:2rem;">Identity Settings</h2>
+      <div style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700;">Identity & Settings</h2>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage your profile identity, contact details, and
+          local data persistence.</p>
+      </div>
+
       <div class="bento-grid">
         <div class="bento-card grid-w-2 grid-h-2">
           <div class="card-label">User Profile</div>
-          <div style="display:flex; flex-direction:column; align-items:center; margin-top:2rem;">
+          <div style="display:flex; flex-direction:column; align-items:center; margin-top:1.5rem;">
             <div class="profile-avatar" id="profileDisplay">
               <span id="avatarInitial">👤</span>
             </div>
             <input type="file" id="avatarInput" hidden accept="image/*" onchange="handleAvatar(this)" />
-            <button class="btn-solar outline" style="font-size:0.7rem; padding:0.4rem 1rem;"
+            <button class="btn-solar outline" style="font-size:0.75rem; padding:0.4rem 0.9rem;"
               onclick="document.getElementById('avatarInput').click()">Upload Photo</button>
           </div>
-          <div style="margin-top:2rem; display:flex; flex-direction:column; gap:1rem;">
+          <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.9rem;">
             <div>
-              <label class="card-label">Full Name</label>
-              <input class="form-input-solar" id="profName" placeholder="Enter name" />
+              <label class="form-label">Full Name</label>
+              <input class="form-input-solar" id="profName" placeholder="Enter full name" />
             </div>
             <div>
-              <label class="card-label">Contact Email</label>
+              <label class="form-label">University Email</label>
               <input class="form-input-solar" id="profEmail" placeholder="user@university.edu" />
             </div>
             <div>
-              <label class="card-label">Phone Number</label>
+              <label class="form-label">Phone Number</label>
               <input class="form-input-solar" id="profPhone" placeholder="+94 7X XXX XXXX" />
             </div>
-            <button class="btn-solar" onclick="saveProfile()">Save Identity</button>
+            <button class="btn-solar" onclick="saveProfile()" style="margin-top:0.5rem;">Save Identity</button>
           </div>
         </div>
 
         <div class="bento-card grid-w-2">
           <div class="card-label">Data Management</div>
-          <div style="margin-top:1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div style="margin-top:1.25rem; display: flex; flex-direction: column; gap: 1rem;">
             <div>
-              <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:0.8rem;">
-                Log out of your current session on this device.
+              <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
+                Logout of your active session on this device.
               </p>
-              <button class="btn-solar outline"
-                style="width: 100%; border-color: hsl(var(--red)); color: hsl(var(--red));" onclick="logout()">Logout
-                Session</button>
+              <button class="btn-solar outline" style="width: 100%; border-color: var(--danger); color: var(--danger);"
+                onclick="logout()">Logout Session</button>
             </div>
-            <div style="border-top: 1px solid var(--glass-border); padding-top: 1rem; margin-top: 0.5rem;">
-              <p style="font-size:0.8rem; color:var(--text-dim); margin-top: 1rem; margin-bottom:0.8rem;">
-                Clearing your data will permanently delete all transactions, budgets, and goals.
+            <div style="border-top: 1px solid var(--border-color); padding-top: 1rem;">
+              <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
+                Clearing data will permanently reset transactions, budgets, goals, and recurring entries stored in
+                LocalStorage.
               </p>
               <button class="danger-btn" style="width: 100%;" onclick="clearAllData()">Clear Local Data</button>
             </div>
@@ -319,9 +433,11 @@
   <!-- MODALS -->
   <div class="modal-overlay" id="budgetModal">
     <div class="modal">
-      <h3>New Budget</h3>
-      <div style="margin-top:1.5rem;">
-        <label class="card-label">Category</label>
+      <h3>Set Category Budget</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Define a
+        spending limit for this category.</p>
+      <div>
+        <label class="form-label">Category</label>
         <select class="form-input-solar" id="budgetCat">
           <option value="food">🍜 Food</option>
           <option value="transport">🚌 Travel</option>
@@ -333,36 +449,36 @@
         </select>
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Limit (Rs)</label>
+        <label class="form-label">Monthly Limit (Rs)</label>
         <input class="form-input-solar" id="budgetAmt" type="number" placeholder="5000" />
       </div>
-      <div style="display:flex; gap:1rem; margin-top:2rem;">
-        <button class="btn-solar" style="flex:1" onclick="saveBudget()">Save</button>
-        <button class="btn-solar" style="flex:1; background:transparent; border:1px solid var(--glass-border);"
-          onclick="closeModal('budgetModal')">Cancel</button>
+      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+        <button class="btn-solar" style="flex:1" onclick="saveBudget()">Save Budget</button>
+        <button class="btn-solar outline" style="flex:1" onclick="closeModal('budgetModal')">Cancel</button>
       </div>
     </div>
   </div>
 
   <div class="modal-overlay" id="goalModal">
     <div class="modal">
-      <h3>New Financial Goal</h3>
-      <div style="margin-top:1.5rem;">
-        <label class="card-label">Goal Name</label>
-        <input class="form-input-solar" id="goalName" placeholder="New Laptop" />
+      <h3>New Savings Goal</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Track target
+        savings for major milestones.</p>
+      <div>
+        <label class="form-label">Goal Title</label>
+        <input class="form-input-solar" id="goalName" placeholder="e.g. Laptop Upgrade" />
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Target Amount (Rs)</label>
+        <label class="form-label">Target Amount (Rs)</label>
         <input class="form-input-solar" id="goalTarget" type="number" placeholder="60000" />
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Currently Saved (Rs)</label>
+        <label class="form-label">Saved so far (Rs)</label>
         <input class="form-input-solar" id="goalSaved" type="number" placeholder="5000" />
       </div>
-      <div style="display:flex; gap:1rem; margin-top:2rem;">
-        <button class="btn-solar" style="flex:1" onclick="saveGoal()">Create</button>
-        <button class="btn-solar" style="flex:1; background:transparent; border:1px solid var(--glass-border);"
-          onclick="closeModal('goalModal')">Cancel</button>
+      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+        <button class="btn-solar" style="flex:1" onclick="saveGoal()">Create Goal</button>
+        <button class="btn-solar outline" style="flex:1" onclick="closeModal('goalModal')">Cancel</button>
       </div>
     </div>
   </div>
@@ -370,104 +486,110 @@
   <div class="modal-overlay" id="recModal">
     <div class="modal">
       <h3>Add Subscription</h3>
-      <div style="margin-top:1.5rem;">
-        <label class="card-label">Service Name</label>
-        <input class="form-input-solar" id="recName" placeholder="Netflix" />
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Record
+        recurring digital services or regular bills.</p>
+      <div>
+        <label class="form-label">Service Name</label>
+        <input class="form-input-solar" id="recName" placeholder="e.g. Spotify / Gym" />
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Cost per Month (Rs)</label>
+        <label class="form-label">Cost per Month (Rs)</label>
         <input class="form-input-solar" id="recAmt" type="number" placeholder="199" />
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Next Renewal Date</label>
+        <label class="form-label">Next Renewal Date</label>
         <input class="form-input-solar" id="recDate" type="date" />
       </div>
-      <div style="display:flex; gap:1rem; margin-top:2rem;">
-        <button class="btn-solar" style="flex:1" onclick="saveRecurring()">Add</button>
-        <button class="btn-solar" style="flex:1; background:transparent; border:1px solid var(--glass-border);"
-          onclick="closeModal('recModal')">Cancel</button>
+      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+        <button class="btn-solar" style="flex:1" onclick="saveRecurring()">Save Service</button>
+        <button class="btn-solar outline" style="flex:1" onclick="closeModal('recModal')">Cancel</button>
       </div>
     </div>
   </div>
 
   <div class="modal-overlay" id="loanModal">
     <div class="modal">
-      <h3>Record Loan/Debt</h3>
-      <div style="margin-top:1.5rem;">
-        <label class="card-label">Person Name</label>
+      <h3>Record Loan or Debt</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Keep track of
+        payables and receivables with classmates or friends.</p>
+      <div>
+        <label class="form-label">Person Name</label>
         <input class="form-input-solar" id="loanPerson" placeholder="John Doe" />
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Reason / Description</label>
-        <input class="form-input-solar" id="loanName" placeholder="Personal Loan" />
+        <label class="form-label">Description</label>
+        <input class="form-input-solar" id="loanName" placeholder="Lunch money / Project fee" />
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Amount (Rs)</label>
-        <input class="form-input-solar" id="loanAmt" type="number" placeholder="10000" />
+        <label class="form-label">Amount (Rs)</label>
+        <input class="form-input-solar" id="loanAmt" type="number" placeholder="1000" />
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Type</label>
+        <label class="form-label">Entry Type</label>
         <select class="form-input-solar" id="loanType">
-          <option value="debt">I Owe Someone</option>
-          <option value="loan">Someone Owes Me</option>
+          <option value="debt">Payables (Money you need to repay)</option>
+          <option value="loan">Receivables (Money others need to repay to you)</option>
         </select>
       </div>
       <div style="margin-top:1rem;">
-        <label class="card-label">Due Date</label>
+        <label class="form-label">Due Date</label>
         <input class="form-input-solar" id="loanDate" type="date" />
       </div>
-      <div style="display:flex; gap:1rem; margin-top:2rem;">
-        <button class="btn-solar" style="flex:1" onclick="saveLoan()">Record</button>
-        <button class="btn-solar" style="flex:1; background:transparent; border:1px solid var(--glass-border);"
-          onclick="closeModal('loanModal')">Cancel</button>
+      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+        <button class="btn-solar" style="flex:1" onclick="saveLoan()">Record Entry</button>
+        <button class="btn-solar outline" style="flex:1" onclick="closeModal('loanModal')">Cancel</button>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast"
-    style="position:fixed; bottom:2rem; right:2rem; background:var(--accent); color:white; padding:1rem 2rem; border-radius:var(--radius-sm); z-index:1000; display:none;">
-  </div>
+  <div class="toast" id="toast"></div>
 
   <script src="app.js"></script>
-  <!-- MOBILE NAVIGATION (Only visible on Phone) -->
-  <nav class="mobile-nav" style="display: none;">
-    <button class="mobile-nav-item active" onclick="showPage('overview')"><i>🏠</i><span>Dash</span></button>
-    <button class="mobile-nav-item" onclick="showPage('budget')"><i>📊</i><span>Budget</span></button>
-    <button class="mobile-nav-item" onclick="showPage('history')"><i>📜</i><span>History</span></button>
-    <button class="mobile-nav-item" onclick="showPage('recurring')"><i>🔄</i><span>Bills</span></button>
-    <button class="mobile-nav-item" onclick="showPage('profile')"><i>👤</i><span>Me</span></button>
-    <button class="mobile-nav-item" onclick="logout()"
-      style="color: hsl(var(--red));"><i>🚪</i><span>Exit</span></button>
+
+  <!-- 5-ITEM MOBILE BOTTOM NAVIGATION BAR (<768px) -->
+  <nav class="mobile-nav">
+    <button class="mobile-nav-item active" onclick="showPage('overview')">
+      <i data-lucide="layout-dashboard"></i><span>Home</span>
+    </button>
+    <button class="mobile-nav-item" onclick="showPage('budget')">
+      <i data-lucide="pie-chart"></i><span>Budget</span>
+    </button>
+    <button class="mobile-nav-item" onclick="showPage('history')">
+      <i data-lucide="history"></i><span>History</span>
+    </button>
+    <button class="mobile-nav-item" onclick="showPage('recurring')">
+      <i data-lucide="repeat"></i><span>Bills</span>
+    </button>
+    <button class="mobile-nav-item" onclick="showPage('profile')">
+      <i data-lucide="user"></i><span>Profile</span>
+    </button>
   </nav>
 
   <!-- WELCOME MODAL -->
   <div class="modal-overlay" id="welcomeModal">
-    <div class="modal" style="max-width: 500px; text-align: center; padding: 3rem;">
-      <div style="font-size: 4rem; margin-bottom: 1rem;">👋</div>
-      <h2 style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 1rem;">Welcome to UniWallet!</h2>
-      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 2rem;">
+    <div class="modal" style="max-width: 480px; text-align: center;">
+      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Welcome to UniWallet!</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
         Your high-fidelity financial journey begins now. We've credited your account with <strong
-          style="color:var(--accent);">Rs 1,000.00</strong> as an initial balance to help you explore.
+          style="color:var(--primary);">Rs 1,000.00</strong> as an initial balance.
       </p>
 
       <div
-        style="text-align: left; background: hsla(0,0%,0%,0.2); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+        style="text-align: left; background: var(--bg-input); padding: 1.25rem; border-radius: var(--radius-md); border:1px solid var(--border-color); margin-bottom: 1.5rem;">
         <div
-          style="font-size: 0.7rem; font-weight: 700; color: var(--accent); margin-bottom: 1rem; text-transform: uppercase;">
+          style="font-size: 0.7rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing:0.05em;">
           Pro Tips:</div>
-        <ul style="font-size: 0.8rem; color: var(--text-dim); list-style: none; padding: 0;">
-          <li style="margin-bottom: 0.8rem;">✨ <strong>Quick Log:</strong> Use the tabs to switch between
-            Income/Expense.</li>
-          <li style="margin-bottom: 0.8rem;">🧹 <strong>Clean Slate:</strong> Want to reset? Go to
-            <strong>Profile</strong> and use the <strong>Clear Local Data</strong> button.
+        <ul style="font-size: 0.8rem; color: var(--text-secondary); list-style: none; padding: 0;">
+          <li style="margin-bottom: 0.6rem;">⚡ <strong>Quick Log:</strong> Switch between Income/Expense easily.</li>
+          <li style="margin-bottom: 0.6rem;">🧹 <strong>Data Reset:</strong> Reset data anytime via Profile settings.
           </li>
-          <li style="margin-bottom: 0.8rem;">🛡️ <strong>Private:</strong> Your data is stored locally on this device
-            only.</li>
+          <li style="margin-bottom: 0.4rem;">🔒 <strong>Private:</strong> Data stays saved on your local device.</li>
         </ul>
       </div>
 
-      <button class="btn-solar" style="width: 100%; padding: 1rem;" onclick="closeModal('welcomeModal')">I Agree & Enter
-        Dashboard</button>
+      <button class="btn-solar" style="width: 100%; padding: 0.85rem;" onclick="closeModal('welcomeModal')">Get Started
+        Now</button>
     </div>
   </div>
 </body>

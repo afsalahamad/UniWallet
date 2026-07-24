@@ -767,6 +767,7 @@ function deleteLoan(id) {
     data.loans = data.loans.filter(l => l.id !== id);
     saveData();
     renderLoans();
+    renderDashLoans();
 }
 
 function renderHistory() { renderTransactions(); }
@@ -883,6 +884,7 @@ function saveLoan() {
         saveData();
         closeModal('loanModal');
         renderLoans();
+        renderDashLoans();
         checkAutomatedNotifications();
     }
 }
@@ -1009,12 +1011,75 @@ function getMonthlyTransactions() {
     });
 }
 
+function renderDashLoans() {
+    const el = document.getElementById('dashLoanContent');
+    if (!el) return;
+
+    const loans = data.loans || [];
+    const totalPayables = loans.filter(l => l.type === 'debt').reduce((s, l) => s + (parseFloat(l.amt) || 0), 0);
+    const totalReceivables = loans.filter(l => l.type === 'loan').reduce((s, l) => s + (parseFloat(l.amt) || 0), 0);
+
+    const upcoming = loans.filter(l => l.date).sort((a, b) => new Date(a.date) - new Date(b.date));
+    const nextUpcoming = upcoming.length > 0 ? upcoming[0] : null;
+
+    let upcomingHtml = '';
+    if (nextUpcoming) {
+        const isDebt = nextUpcoming.type === 'debt';
+        upcomingHtml = `
+            <div style="margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:${isDebt ? 'var(--danger-bg)' : 'var(--success-bg)'}; color:${isDebt ? 'var(--danger)' : 'var(--success)'}; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:0.85rem;">
+                        ${isDebt ? '💸' : '💰'}
+                    </div>
+                    <div>
+                        <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary);">${nextUpcoming.person} — ${nextUpcoming.name}</div>
+                        <div style="font-size:0.75rem; color:var(--text-secondary);">Due: ${nextUpcoming.date} (${isDebt ? 'Payable' : 'Receivable'})</div>
+                    </div>
+                </div>
+                <div style="font-weight:700; font-size:0.95rem; color:${isDebt ? 'var(--danger)' : 'var(--success)'};">
+                    ${fmt(nextUpcoming.amt)}
+                </div>
+            </div>
+        `;
+    } else {
+        upcomingHtml = `
+            <div style="margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
+                ✨ No upcoming loan dues scheduled.
+            </div>
+        `;
+    }
+
+    el.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.85rem;">
+            <div style="background: var(--bg-input); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
+                    Total Payables (Owed)
+                </div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: var(--danger); margin-top: 0.25rem;">
+                    ${fmt(totalPayables)}
+                </div>
+            </div>
+
+            <div style="background: var(--bg-input); padding: 0.85rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">
+                    Total Receivables (Due to You)
+                </div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: var(--success); margin-top: 0.25rem;">
+                    ${fmt(totalReceivables)}
+                </div>
+            </div>
+        </div>
+        ${upcomingHtml}
+    `;
+}
+
 function renderAll() {
     updateGreeting();
     updateTotals();
     renderChart();
     renderTransactions();
     renderInsights();
+    renderDashLoans();
     renderProfile();
     checkAutomatedNotifications();
     refreshIcons();

@@ -43,7 +43,10 @@
         </div>
 
         <div class="form-group" style="margin-bottom: 1.5rem;">
-          <label class="form-label">Password</label>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label class="form-label" style="margin-bottom: 0;">Password</label>
+            <a href="javascript:void(0)" onclick="openForgotPasswordModal()" class="forgot-password-link">Forgot Password?</a>
+          </div>
           <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required />
         </div>
 
@@ -57,6 +60,114 @@
 
       <div class="auth-footer">
         New to UniWallet? <a href="signup.html">Create an Account</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔒 Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-icon-badge primary">
+          <i data-lucide="key-round" style="width:22px; height:22px;"></i>
+        </div>
+        <div>
+          <h2 class="modal-title" id="forgotModalTitle">Account Recovery</h2>
+          <p class="modal-subtitle" id="forgotModalSubtitle">Reset your UniWallet password safely.</p>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeForgotPasswordModal()" aria-label="Close modal">
+          <i data-lucide="x" style="width:18px; height:18px;"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Modal Inline Error -->
+        <div id="forgotModalError" class="auth-error" style="display:none; margin-bottom: 1.25rem;"></div>
+
+        <!-- Step 1: Verify Email -->
+        <div id="forgotStep1" class="modal-step">
+          <form onsubmit="handleForgotStep1(event)">
+            <div class="form-group">
+              <label class="form-label">University Email</label>
+              <input type="email" id="forgotEmail" class="form-input" placeholder="eg: alexjohn.gmail.com" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+              Verify Account Email
+            </button>
+          </form>
+        </div>
+
+        <!-- Step 2: Verification Method (Security Question or Recovery Code) -->
+        <div id="forgotStep2" class="modal-step" style="display:none;">
+          <div class="recovery-tab-group">
+            <button type="button" class="recovery-tab active" id="tabQuestionBtn" onclick="switchRecoveryTab('question')">
+              <i data-lucide="help-circle" style="width:16px; height:16px;"></i> Security Question
+            </button>
+            <button type="button" class="recovery-tab" id="tabCodeBtn" onclick="switchRecoveryTab('code')">
+              <i data-lucide="shield" style="width:16px; height:16px;"></i> Recovery Code
+            </button>
+          </div>
+
+          <form onsubmit="handleForgotStep2(event)">
+            <!-- Option A: Security Question -->
+            <div id="tabQuestionContent">
+              <div class="form-group" style="margin-bottom: 1rem;">
+                <label class="form-label">Security Question</label>
+                <div id="displaySecurityQuestion" class="security-question-box">Loading question...</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Your Security Answer</label>
+                <input type="text" id="forgotAnswer" class="form-input" placeholder="Enter your answer" />
+              </div>
+            </div>
+
+            <!-- Option B: Recovery Code -->
+            <div id="tabCodeContent" style="display:none;">
+              <div class="form-group">
+                <label class="form-label">Secret Recovery Code</label>
+                <input type="text" id="forgotCode" class="form-input" placeholder="e.g. UNI-8K2P-9M4Q" style="letter-spacing: 0.05em; font-family: monospace;" />
+                <p class="form-hint" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                  Enter the 12-character recovery code generated when you registered.
+                </p>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem;">
+              Verify & Proceed
+            </button>
+          </form>
+        </div>
+
+        <!-- Step 3: Create New Password -->
+        <div id="forgotStep3" class="modal-step" style="display:none;">
+          <form onsubmit="handleForgotStep3(event)">
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label">New Password</label>
+              <input type="password" id="newPassword" class="form-input" placeholder="At least 6 characters" required minlength="6" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input type="password" id="confirmNewPassword" class="form-input" placeholder="Re-enter new password" required minlength="6" />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem;">
+              Update Password
+            </button>
+          </form>
+        </div>
+
+        <!-- Step 4: Reset Success -->
+        <div id="forgotStep4" class="modal-step" style="display:none; text-align: center;">
+          <div class="success-icon-circle" style="width: 56px; height: 56px; border-radius: 50%; background: var(--success-bg); color: var(--success); display: flex; align-items: center; justify-content: center; margin: 0.5rem auto 1rem auto;">
+            <i data-lucide="check-circle-2" style="width: 32px; height: 32px;"></i>
+          </div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">Password Reset Successful</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.4;">
+            Your password has been updated. You can now log in to your UniWallet account.
+          </p>
+          <button type="button" class="btn btn-primary" onclick="finishPasswordReset()" style="width: 100%;">
+            Return to Login
+          </button>
+        </div>
       </div>
     </div>
   </div>

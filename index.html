@@ -243,6 +243,20 @@
         </div>
       </div>
 
+      <!-- DASHBOARD LOANS & DEBT SUMMARY CARD -->
+      <div id="dashLoanCard" class="bento-card" style="margin-top: 1.5rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom: 0.85rem;">
+          <div class="card-label" style="display:flex; align-items:center; gap:6px;">
+            <i data-lucide="arrow-left-right" style="width:14px; height:14px; color:var(--primary);"></i>
+            <span>LOANS & DEBT SUMMARY</span>
+          </div>
+          <button class="btn-solar outline" onclick="showPage('loans')" style="font-size:0.75rem; padding:0.4rem 0.85rem; min-height:36px; display:inline-flex; align-items:center; gap:4px;">
+            <span>Manage Loans</span> <i data-lucide="arrow-right" style="width:14px; height:14px;"></i>
+          </button>
+        </div>
+        <div id="dashLoanContent"></div>
+      </div>
+
       <!-- Recent Transactions Section -->
       <div style="margin-top: 2.25rem;">
         <div class="recent-tx-header-row">
@@ -557,7 +571,7 @@
 
   <script src="app.js"></script>
 
-  <!-- 5-ITEM MOBILE BOTTOM NAVIGATION BAR (<768px) -->
+  <!-- 7-ITEM MOBILE BOTTOM NAVIGATION BAR (<768px) -->
   <nav class="mobile-nav">
     <button class="mobile-nav-item active" onclick="showPage('overview')">
       <i data-lucide="layout-dashboard"></i><span>Home</span>
@@ -565,11 +579,17 @@
     <button class="mobile-nav-item" onclick="showPage('budget')">
       <i data-lucide="pie-chart"></i><span>Budget</span>
     </button>
-    <button class="mobile-nav-item" onclick="showPage('history')">
-      <i data-lucide="history"></i><span>History</span>
+    <button class="mobile-nav-item" onclick="showPage('savings')">
+      <i data-lucide="target"></i><span>Goals</span>
+    </button>
+    <button class="mobile-nav-item" onclick="showPage('loans')">
+      <i data-lucide="arrow-left-right"></i><span>Loans</span>
     </button>
     <button class="mobile-nav-item" onclick="showPage('recurring')">
       <i data-lucide="repeat"></i><span>Bills</span>
+    </button>
+    <button class="mobile-nav-item" onclick="showPage('history')">
+      <i data-lucide="history"></i><span>History</span>
     </button>
     <button class="mobile-nav-item" onclick="showPage('profile')">
       <i data-lucide="user"></i><span>Profile</span>

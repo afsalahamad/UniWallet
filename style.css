@@ -1271,7 +1271,7 @@ input::-webkit-inner-spin-button {
     font-size: 1.1rem !important;
   }
 
-  /* 5-Item Mobile Bottom Navigation Bar */
+  /* 7-Item Mobile Bottom Navigation Bar */
   .mobile-nav {
     display: flex !important;
     position: fixed;
@@ -1282,10 +1282,17 @@ input::-webkit-inner-spin-button {
     background: var(--bg-surface);
     border-top: 1px solid var(--border-color);
     z-index: 1500;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
-    padding: 0 0.25rem;
+    padding: 0 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .mobile-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .mobile-nav-item {
@@ -1299,12 +1306,11 @@ input::-webkit-inner-spin-button {
     text-decoration: none;
     background: none;
     border: none;
-    padding: 0.4rem 0.15rem;
+    padding: 0.4rem 0.65rem;
     transition: all 0.2s ease;
-    flex: 1;
-    font-weight: 600;
+    flex: 0 0 auto;
+    min-width: 64px;
     min-height: 48px;
-    min-width: 48px;
     cursor: pointer;
     white-space: nowrap;
     text-align: center;
@@ -1331,12 +1337,13 @@ input::-webkit-inner-spin-button {
 @media (max-width: 480px) {
   .mobile-nav {
     height: 80px;
-    padding: 0 0.15rem;
+    padding: 0 0.35rem;
   }
 
   .mobile-nav-item {
     gap: 3px;
-    padding: 0.35rem 0.1rem;
+    padding: 0.35rem 0.5rem;
+    min-width: 58px;
   }
 
   .mobile-nav-item i {
@@ -1351,5 +1358,228 @@ input::-webkit-inner-spin-button {
 
   .hero-stats-grid {
     grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ========================================================= */
+/* 🔒 MODAL & PASSWORD RECOVERY STYLES */
+/* ========================================================= */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  padding: 1rem;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 440px;
+  padding: 1.75rem;
+  box-shadow: var(--card-shadow);
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-backdrop.active .modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-right: 1.5rem;
+  position: relative;
+}
+
+.modal-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modal-icon-badge.primary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.modal-icon-badge.success {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.modal-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface);
+}
+
+.modal-body {
+  margin-top: 0.5rem;
+}
+
+/* Recovery Tab Group */
+.recovery-tab-group {
+  display: flex;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 1.25rem;
+}
+
+.recovery-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.recovery-tab.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.security-question-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.alert-info-box {
+  background: var(--primary-light);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.825rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
+}
+
+.recovery-code-display-group {
+  background: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.recovery-code-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.recovery-code-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+}
+
+.forgot-password-link {
+  font-size: 0.8rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+  color: var(--primary-hover);
+}
+
+@media (max-width: 480px) {
+  .modal-card {
+    padding: 1.25rem;
+    max-width: 100%;
+  }
+
+  .recovery-code-text {
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
   }
 }

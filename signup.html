@@ -5,10 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Afsal Ahamad">
-  <title>Join UniWallet — Student Money Tracker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="style.css">
+  <title>Create Account — UniWallet</title>
+  <link rel="stylesheet" href="style.css?v=6">
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="theme.js"></script>
   <script src="auth.js"></script>
@@ -17,64 +15,95 @@
 
 <body class="auth-body">
 
-  <button class="theme-toggle-btn" onclick="toggleTheme()"
-    style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--card-shadow); z-index: 1000;">
-    <i data-lucide="sun" style="width:18px; height:18px;"></i>
+  <button class="auth-theme-btn theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">
+    <i data-lucide="moon" style="width:17px; height:17px;"></i>
   </button>
 
-  <div class="auth-container">
-    <div class="sidebar-logo" style="margin-bottom: 2rem; font-size: 2rem; justify-content: center;">
-      <div class="sidebar-logo-icon" style="width:42px; height:42px;">
-        <i data-lucide="wallet" style="width:22px; height:22px;"></i>
+  <div class="auth-shell">
+    <!-- Left Editorial Showcase -->
+    <section class="auth-editorial-aside">
+      <div class="brand-logo" style="margin-bottom: 1.75rem;">
+        <div class="brand-logo-mark">
+          <i data-lucide="wallet" style="width:18px; height:18px;"></i>
+        </div>
+        <div>Uni<span>Wallet</span></div>
       </div>
-      Uni<span>Wallet</span>
-    </div>
 
-    <div class="auth-card">
-      <h1 class="auth-title">Create Account</h1>
-      <p class="auth-subtitle">Start tracking your money smartly today.</p>
+      <div class="auth-editorial-kicker">
+        <i data-lucide="shield-check" style="width:13px; height:13px;"></i> Private Student Ledger
+      </div>
 
-      <div id="authError" class="auth-error" style="display:none;"></div>
+      <h1 class="auth-editorial-headline">
+        Start your semester with <em>clear financial habits</em>.
+      </h1>
 
-      <form onsubmit="signup(event)">
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" id="signupName" class="form-input" placeholder="e.g. Alex Johnson" required />
+      <p class="auth-editorial-copy">
+        Create an on-device UniWallet profile in under a minute. Includes a recovery key and security question so you stay in control offline.
+      </p>
+
+      <ul class="auth-editorial-points">
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>Track monthly budgets, goals, subscriptions, and peer IOUs together.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>Generates a unique 12-character recovery code on signup.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>Installable as a Progressive Web App on phone or desktop.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Right Focused Signup Card -->
+    <div class="auth-container">
+      <div class="auth-card">
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Set up your private student wallet today.</p>
+
+        <div id="authError" class="auth-error" style="display:none;"></div>
+
+        <form onsubmit="signup(event)">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="signupName" class="form-input" placeholder="e.g. Alex Johnson" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">University Email</label>
+            <input type="email" id="signupEmail" class="form-input" placeholder="alex@university.edu" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Security Password</label>
+            <input type="password" id="signupPassword" class="form-input" placeholder="At least 6 characters" required minlength="6" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Security Question</label>
+            <select id="signupQuestion" class="form-input" required>
+              <option value="" disabled selected>Select a security question...</option>
+              <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+              <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+              <option value="What high school did you attend?">What high school did you attend?</option>
+              <option value="What city were you born in?">What city were you born in?</option>
+              <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.4rem;">
+            <label class="form-label">Security Answer</label>
+            <input type="text" id="signupAnswer" class="form-input" placeholder="Enter your answer" required />
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Create My Wallet</button>
+        </form>
+
+        <div class="auth-footer">
+          Already a member? <a href="login.html">Log In</a>
         </div>
-
-        <div class="form-group">
-          <label class="form-label">University Email</label>
-          <input type="email" id="signupEmail" class="form-input" placeholder="alexjohn.gmail.com" required />
-        </div>
-
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label class="form-label">Security Password</label>
-          <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required
-            minlength="6" />
-        </div>
-
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label class="form-label">Security Question</label>
-          <select id="signupQuestion" class="form-input" required style="cursor: pointer; appearance: auto;">
-            <option value="" disabled selected>Select a security question...</option>
-            <option value="What was the name of your first pet?">What was the name of your first pet?</option>
-            <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
-            <option value="What high school did you attend?">What high school did you attend?</option>
-            <option value="What city were you born in?">What city were you born in?</option>
-            <option value="What was your childhood nickname?">What was your childhood nickname?</option>
-          </select>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-          <label class="form-label">Security Answer</label>
-          <input type="text" id="signupAnswer" class="form-input" placeholder="Enter your answer" required />
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Create My Wallet</button>
-      </form>
-
-      <div class="auth-footer">
-        Already a member? <a href="login.html">Log In</a>
       </div>
     </div>
   </div>
@@ -84,7 +113,7 @@
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-icon-badge success">
-          <i data-lucide="shield-check" style="width:24px; height:24px;"></i>
+          <i data-lucide="shield-check" style="width:22px; height:22px;"></i>
         </div>
         <div>
           <h2 class="modal-title">Account Created!</h2>
@@ -94,7 +123,7 @@
 
       <div class="modal-body">
         <div class="alert-info-box">
-          <i data-lucide="alert-triangle" style="width:18px; height:18px; flex-shrink: 0; margin-top:2px;"></i>
+          <i data-lucide="alert-triangle" style="width:17px; height:17px; margin-top:2px;"></i>
           <span><strong>Important:</strong> Keep this recovery code safe. You can use it to recover your password if you ever forget it.</span>
         </div>
 
@@ -104,8 +133,8 @@
             <span id="displayRecoveryCode" class="recovery-code-text">UNI-XXXX-YYYY</span>
           </div>
           <button type="button" id="copyCodeBtn" class="btn btn-secondary" onclick="copyRecoveryCode()"
-            style="width: 100%; margin-top: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <i data-lucide="copy" style="width:16px; height:16px;"></i> Copy Recovery Code
+            style="width: 100%; margin-top: 0.85rem;">
+            <i data-lucide="copy" style="width:15px; height:15px;"></i> Copy Recovery Code
           </button>
         </div>
       </div>
@@ -119,8 +148,7 @@
   </div>
 
   <footer class="footer">
-    &copy; 2026 UniWallet. All rights reserved.<br />
-    Developed by <strong>Afsal Ahamad</strong>
+    &copy; 2026 UniWallet. All rights reserved. &middot; Developed by <strong>Afsal Ahamad</strong>
   </footer>
 
   <script>

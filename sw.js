@@ -1,11 +1,11 @@
 // sw.js - Service Worker for caching assets
-const CACHE_NAME = 'uniwallet-cache-v2';
+const CACHE_NAME = 'uniwallet-cache-v6';
 const ASSETS = [
   '/',
-  // 'index.html', // removed to force network request each load
   'login.html',
   'signup.html',
-  'style.css',
+  'guest.html',
+  'style.css?v=6',
   'app.js',
   'auth.js',
   'theme.js',
@@ -14,19 +14,9 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', event => {
-  // Pre‑cache static assets (excluding index.html to always fetch fresh)
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll([
-      '/',
-      'login.html',
-      'signup.html',
-      'style.css',
-      'app.js',
-      'auth.js',
-      'theme.js',
-      'manifest.json',
-      'icon_192.png'
-    ]))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS).catch(() => {}))
   );
 });
 

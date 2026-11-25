@@ -4,8 +4,8 @@
   "description": "Student Money Tracker – a progressive web app",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#10b981",
+  "background_color": "#FFFFFF",
+  "theme_color": "#7C3AED",
   "icons": [
     {
       "src": "icon_192.png",

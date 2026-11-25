@@ -5,10 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Afsal Ahamad">
-  <title>UniWallet</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="style.css">
+  <title>UniWallet — Student Finance Ledger</title>
+  <link rel="stylesheet" href="style.css?v=6">
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="theme.js"></script>
   <script src="auth.js"></script>
@@ -34,92 +32,74 @@
 
 <body>
 
-  <!-- SIDEBAR NAVIGATION (Desktop) -->
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">
-        <i data-lucide="wallet"></i>
-      </div>
-      Uni<span>Wallet</span>
-    </div>
-    <nav class="nav-menu">
-      <button class="nav-item active" onclick="showPage('overview')">
-        <i data-lucide="layout-dashboard"></i> <span>Dashboard</span>
-      </button>
-      <button class="nav-item" onclick="showPage('budget')">
-        <i data-lucide="pie-chart"></i> <span>Budgeting</span>
-      </button>
-      <button class="nav-item" onclick="showPage('savings')">
-        <i data-lucide="target"></i> <span>Goals</span>
-      </button>
-      <button class="nav-item" onclick="showPage('recurring')">
-        <i data-lucide="repeat"></i> <span>Subscriptions</span>
-      </button>
-      <button class="nav-item" onclick="showPage('loans')">
-        <i data-lucide="arrow-left-right"></i> <span>Loans & Debt</span>
-      </button>
-      <button class="nav-item" onclick="showPage('history')">
-        <i data-lucide="history"></i> <span>History</span>
-      </button>
-      <button class="nav-item" onclick="showPage('guide')">
-        <i data-lucide="book-open"></i> <span>Onboarding</span>
-      </button>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="nav-item" onclick="showPage('profile')"
-        style="margin-bottom:0.5rem; cursor:pointer; padding:0.6rem 0.75rem; border-radius:var(--radius-md); border:1px solid var(--border-color); background: var(--bg-card);">
-        <div id="footerAvatar"
-          style="width:32px; height:32px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; overflow:hidden; flex-shrink:0;">
-          👤</div>
-        <div style="overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">
-          <div id="footerName" style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">User</div>
+  <!-- STICKY EDITORIAL WORKSPACE BAR -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div style="display:flex; align-items:center; gap:0.6rem;">
+        <button class="header-action-btn mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileNav()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileSideNav">
+          <i data-lucide="menu" style="width:18px; height:18px;"></i>
+        </button>
+
+        <div class="brand-logo" onclick="showPage('overview')" role="button" tabindex="0">
+          <div class="brand-logo-mark">
+            <i data-lucide="wallet" style="width:18px; height:18px;"></i>
+          </div>
+          <div class="brand-logo-text">Uni<span>Wallet</span></div>
         </div>
       </div>
-      <button class="nav-item theme-toggle-btn" onclick="toggleTheme()">
-        <i data-lucide="sun"></i> <span>Toggle Theme</span>
-      </button>
-      <button class="nav-item" onclick="logout()" style="color: var(--danger);">
-        <i data-lucide="log-out"></i> <span>Logout</span>
-      </button>
 
-      <div
-        style="margin-top: 0.85rem; font-size: 0.65rem; color: var(--text-secondary); text-align: center; line-height: 1.4;">
-        &copy; 2026 UniWallet<br />
-        By <strong>Afsal Ahamad</strong>
-      </div>
-    </div>
-  </aside>
+      <nav class="topbar-nav" aria-label="Workspace navigation">
+        <button class="nav-item active" data-page="overview" onclick="showPage('overview')">
+          <i data-lucide="layout-dashboard"></i> <span>Overview</span>
+        </button>
+        <button class="nav-item" data-page="budget" onclick="showPage('budget')">
+          <i data-lucide="pie-chart"></i> <span>Budgets</span>
+        </button>
+        <button class="nav-item" data-page="savings" onclick="showPage('savings')">
+          <i data-lucide="target"></i> <span>Goals</span>
+        </button>
+        <button class="nav-item" data-page="recurring" onclick="showPage('recurring')">
+          <i data-lucide="repeat"></i> <span>Bills</span>
+        </button>
+        <button class="nav-item" data-page="loans" onclick="showPage('loans')">
+          <i data-lucide="arrow-left-right"></i> <span>Loans</span>
+        </button>
+        <button class="nav-item" data-page="history" onclick="showPage('history')">
+          <i data-lucide="history"></i> <span>History</span>
+        </button>
+        <button class="nav-item" data-page="guide" onclick="showPage('guide')">
+          <i data-lucide="book-open"></i> <span>Guide</span>
+        </button>
+      </nav>
 
-  <!-- MAIN CONTENT AREA -->
-  <main class="main-content">
-    <header class="app-header">
-      <div class="header-greeting-group">
-        <h1 id="headerGreeting">Good Evening, <span id="headerUserName">User</span> 👋</h1>
-        <h1 id="mobilePageTitle" class="mobile-page-title">Dashboard</h1>
-        <p class="header-subtitle" id="headerSubtitle">Track your university finances smarter.</p>
-      </div>
-
-      <div class="header-right-actions">
+      <div class="topbar-utilities">
         <div class="header-search-bar">
-          <i data-lucide="search" style="width:16px; height:16px; color:var(--text-secondary);"></i>
-          <input type="text" class="header-search-input" id="globalSearch" placeholder="Search..."
-            oninput="document.getElementById('txSearch').value = this.value; renderTransactions();" />
+          <i data-lucide="search" style="width:15px; height:15px; color:var(--text-dim);"></i>
+          <input type="text" class="header-search-input" id="globalSearch" placeholder="Search ledger..."
+            oninput="const tx = document.getElementById('txSearch'); if(tx) tx.value = this.value; renderTransactions();" />
+        </div>
+
+        <div class="clock-badge" title="Local Time">
+          <div>
+            <div class="clock-badge-time" id="currentTime">00:00:00</div>
+            <div class="clock-badge-date" id="currentDate">Mon, Jan 01</div>
+          </div>
         </div>
 
         <div style="position:relative;">
           <button class="header-action-btn" title="Notifications" id="notifBellBtn" onclick="toggleNotificationDrawer(event)">
-            <i data-lucide="bell" style="width:18px; height:18px;"></i>
+            <i data-lucide="bell" style="width:17px; height:17px;"></i>
             <span class="notification-badge" id="notifBadge" style="display:none;">0</span>
           </button>
 
-          <!-- NOTIFICATION DRAWER / POPOVER -->
+          <!-- NOTIFICATION POPOVER -->
           <div class="notification-drawer" id="notificationDrawer" style="display:none;" onclick="event.stopPropagation()">
             <div class="notif-header">
               <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">Notifications</h3>
-                <span id="notifUnreadPill" class="pill" style="font-size:0.7rem; padding:0.15rem 0.5rem;">0 Unread</span>
+                <h3>Notifications</h3>
+                <span id="notifUnreadPill" class="pill" style="font-size:0.7rem; padding:0.15rem 0.55rem;">0 Unread</span>
               </div>
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.65rem;">
                 <button class="notif-action-link" onclick="markAllNotificationsRead()">Mark all as read</button>
                 <button class="notif-action-link danger" onclick="clearAllNotifications()">Clear all</button>
               </div>
@@ -128,154 +108,199 @@
           </div>
         </div>
 
-        <button class="header-action-btn" title="Settings" onclick="showPage('profile')">
-          <i data-lucide="settings" style="width:18px; height:18px;"></i>
+        <button class="header-action-btn theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">
+          <i data-lucide="moon" style="width:17px; height:17px;"></i>
         </button>
 
-        <div class="clock-badge">
-          <div class="clock-badge-icon">
-            <i data-lucide="clock" style="width:16px; height:16px;"></i>
-          </div>
-          <div style="display: flex; flex-direction: column;">
-            <div id="currentTime" style="font-size: 0.9rem; font-weight: 700; color: var(--primary); line-height: 1;">
-              00:00:00</div>
-            <div id="currentDate"
-              style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-top: 0.2rem;">
-              Mon, Jan 01</div>
-          </div>
+        <div class="profile-chip" onclick="showPage('profile')" title="Profile & Settings" role="button" tabindex="0">
+          <div class="profile-chip-avatar" id="footerAvatar">U</div>
+          <span class="profile-chip-name" id="footerName">User</span>
         </div>
+
+        <button class="header-action-btn logout-btn" onclick="logout()" title="Logout">
+          <i data-lucide="log-out" style="width:16px; height:16px;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CENTERED EDITORIAL WORKSPACE CANVAS -->
+  <main class="main-content">
+    <header class="app-header">
+      <div class="header-greeting-group">
+        <div class="header-eyebrow">Student Financial Journal</div>
+        <h1 id="headerGreeting">Good Evening, <span id="headerUserName">User</span></h1>
+        <h1 id="mobilePageTitle" class="mobile-page-title">Overview</h1>
+        <p class="header-subtitle" id="headerSubtitle">Calmly track your semester spending, budgets, and goals.</p>
+      </div>
+
+      <div class="header-editorial-meta">
+        <button class="btn-solar outline" onclick="showPage('profile')" style="padding:0.45rem 0.9rem; font-size:0.8rem;">
+          <i data-lucide="sliders-horizontal" style="width:14px; height:14px;"></i> Settings
+        </button>
       </div>
     </header>
 
     <!-- OVERVIEW PAGE -->
     <div id="page-overview" class="page active">
 
-      <!-- DASHBOARD HERO BALANCE SECTION -->
-      <div class="hero-balance-card">
+      <!-- MASTHEAD BALANCE SHEET -->
+      <section class="hero-balance-card">
         <div class="hero-top-row">
           <div>
             <div class="card-label">
-              <i data-lucide="shield-check" style="width:14px; height:14px; color:var(--primary);"></i> NET AVAILABLE BALANCE
-              <span class="hero-live-badge">🟢 Live</span>
+              <i data-lucide="shield-check" style="width:14px; height:14px; color:var(--primary);"></i>
+              NET AVAILABLE BALANCE
+              <span class="hero-live-badge">● Live</span>
             </div>
-            <div class="card-value hero-main-balance" id="totalLeft">Rs 0.00</div>
+            <div class="hero-main-balance" id="totalLeft">Rs 0.00</div>
           </div>
-          <button class="btn-solar hero-desktop-btn" onclick="openModal('budgetModal')">
-            <i data-lucide="plus" style="width:16px; height:16px;"></i> New Budget
-          </button>
+
+          <div class="hero-desktop-actions">
+            <button class="btn-solar outline" onclick="openModal('goalModal')">
+              <i data-lucide="target" style="width:15px; height:15px;"></i> New Goal
+            </button>
+            <button class="btn-solar" onclick="openModal('budgetModal')">
+              <i data-lucide="plus" style="width:15px; height:15px;"></i> New Budget
+            </button>
+          </div>
         </div>
 
         <div class="hero-stats-grid">
           <div class="hero-stat-box">
             <div class="card-label">
-              <i data-lucide="arrow-down-left" style="width:14px; height:14px; color:var(--success);"></i> Monthly
-              Income
+              <i data-lucide="arrow-down-left" style="width:14px; height:14px; color:var(--success);"></i>
+              Monthly Income
             </div>
-            <div class="card-value" id="totalIncome"
-              style="color: var(--success); font-size: 1.5rem; margin-top: 0.3rem;">Rs 0.00</div>
+            <div class="card-value" id="totalIncome" style="color: var(--success);">Rs 0.00</div>
           </div>
 
           <div class="hero-stat-box">
             <div class="card-label">
-              <i data-lucide="arrow-up-right" style="width:14px; height:14px; color:var(--danger);"></i> Monthly
-              Expenses
+              <i data-lucide="arrow-up-right" style="width:14px; height:14px; color:var(--danger);"></i>
+              Monthly Expenses
             </div>
-            <div class="card-value" id="totalSpent"
-              style="color: var(--danger); font-size: 1.5rem; margin-top: 0.3rem;">Rs 0.00</div>
+            <div class="card-value" id="totalSpent" style="color: var(--danger);">Rs 0.00</div>
           </div>
 
           <div class="hero-stat-box">
             <div class="card-label">
-              <i data-lucide="bar-chart-2" style="width:14px; height:14px; color:var(--primary);"></i> 7-Day Spend Trend
+              <i data-lucide="bar-chart-2" style="width:14px; height:14px; color:var(--primary);"></i>
+              7-Day Spend Trend
             </div>
-            <div class="chart-container" id="spendingChart" style="height:40px; margin-top:0.4rem;"></div>
+            <div class="chart-container" id="spendingChart"></div>
           </div>
 
           <div class="hero-stat-box">
             <div class="card-label">
-              <i data-lucide="sparkles" style="width:14px; height:14px; color:var(--warning);"></i> Financial Insights
+              <i data-lucide="sparkles" style="width:14px; height:14px; color:var(--warning);"></i>
+              Financial Insights
             </div>
-            <div id="quickInsights" style="margin-top:0.25rem;"></div>
+            <div id="quickInsights" style="margin-top:0.35rem;"></div>
           </div>
         </div>
 
         <button class="btn-solar hero-mobile-btn" onclick="openModal('budgetModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> New Budget
         </button>
-      </div>
+      </section>
 
-      <!-- MAIN BENTO GRID & QUICK LOG -->
-      <div class="bento-grid">
-        <!-- Quick Transaction Widget -->
-        <div class="bento-card grid-w-4">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="card-label">
-              <i data-lucide="zap" style="width:14px; height:14px; color:var(--primary);"></i> QUICK TRANSACTION LOG
-            </div>
-            <div class="type-tabs">
-              <button class="type-tab active" onclick="setTxType('expense', this)">Expense</button>
-              <button class="type-tab" onclick="setTxType('income', this)">Income</button>
-            </div>
+      <!-- QUICK LEDGER ENTRY BLOCK -->
+      <section class="bento-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+          <div class="card-label">
+            <i data-lucide="feather" style="width:14px; height:14px; color:var(--primary);"></i>
+            QUICK LEDGER ENTRY
           </div>
-
-          <div class="quick-log-inputs" style="display: flex; gap: 0.85rem; margin-top: 1rem;">
-            <div style="flex:2; position:relative;">
-              <input class="form-input-solar" id="txName" placeholder="Description (e.g., Books, Lunch)" />
-            </div>
-            <div style="flex:1; position:relative;">
-              <input class="form-input-solar" id="txAmt" type="number" placeholder="Amount (Rs)" />
-            </div>
-            <div style="flex:1; position:relative;">
-              <select class="form-input-solar" id="txCat">
-                <option value="food">🍜 Food</option>
-                <option value="transport">🚌 Travel</option>
-                <option value="study">📚 Study</option>
-                <option value="entertainment">🎮 Play</option>
-                <option value="health">💊 Health</option>
-                <option value="shopping">🛍️ Shop</option>
-                <option value="other">📦 Other</option>
-              </select>
-            </div>
-            <button class="btn-solar" onclick="addTransaction()" style="padding:0.7rem 1.5rem;">
-              <i data-lucide="send" style="width:16px; height:16px;"></i> Post Log
-            </button>
+          <div class="type-tabs">
+            <button class="type-tab active" onclick="setTxType('expense', this)">Expense</button>
+            <button class="type-tab" onclick="setTxType('income', this)">Income</button>
           </div>
         </div>
-      </div>
 
-      <!-- DASHBOARD LOANS & DEBT SUMMARY CARD -->
-      <div id="dashLoanCard" class="bento-card" style="margin-top: 1.5rem;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom: 0.85rem;">
-          <div class="card-label" style="display:flex; align-items:center; gap:6px;">
-            <i data-lucide="arrow-left-right" style="width:14px; height:14px; color:var(--primary);"></i>
-            <span>LOANS & DEBT SUMMARY</span>
+        <div class="quick-log-inputs">
+          <div style="flex:2;">
+            <input class="form-input-solar" id="txName" placeholder="Description (e.g., Textbooks, Campus Lunch)" />
           </div>
-          <button class="btn-solar outline" onclick="showPage('loans')" style="font-size:0.75rem; padding:0.4rem 0.85rem; min-height:36px; display:inline-flex; align-items:center; gap:4px;">
-            <span>Manage Loans</span> <i data-lucide="arrow-right" style="width:14px; height:14px;"></i>
+          <div style="flex:1;">
+            <input class="form-input-solar" id="txAmt" type="number" placeholder="Amount (Rs)" />
+          </div>
+          <div style="flex:1;">
+            <select class="form-input-solar" id="txCat">
+              <option value="food">🍜 Food</option>
+              <option value="transport">🚌 Travel</option>
+              <option value="study">📚 Study</option>
+              <option value="entertainment">🎮 Play</option>
+              <option value="health">💊 Health</option>
+              <option value="shopping">🛍️ Shop</option>
+              <option value="other">📦 Other</option>
+            </select>
+          </div>
+          <button class="btn-solar" onclick="addTransaction()" style="padding:0.72rem 1.35rem; white-space:nowrap;">
+            <i data-lucide="plus-circle" style="width:16px; height:16px;"></i> Post Entry
           </button>
         </div>
-        <div id="dashLoanContent"></div>
-      </div>
+      </section>
 
-      <!-- Recent Transactions Section -->
-      <div style="margin-top: 2.25rem;">
-        <div class="recent-tx-header-row">
-          <div>
-            <h2 style="font-size: 1.3rem; font-weight: 700;">Recent Transactions</h2>
-            <p style="font-size: 0.8rem; color: var(--text-secondary);">Real-time audit log of active spending and deposits.</p>
+      <!-- 2-COLUMN EDITORIAL LEDGER & SIDEBAR SUMMARY -->
+      <div class="overview-split">
+        <!-- Left: Recent Transactions Ledger -->
+        <section class="ledger-section-card">
+          <div class="recent-tx-header-row">
+            <div>
+              <h2>Recent Ledger</h2>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">Latest spending and deposit entries on your account.</p>
+            </div>
+            <input class="form-input-solar tx-search-mobile" id="txSearch" placeholder="Filter entries..." oninput="renderTransactions()" />
           </div>
-          <input class="form-input-solar tx-search-mobile" id="txSearch" placeholder="Search Transactions..." oninput="renderTransactions()" />
+          <div id="txList"></div>
+        </section>
+
+        <!-- Right: Loans & Quick Workspace Links -->
+        <div class="overview-sidebar-col">
+          <section id="dashLoanCard" class="bento-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom: 0.9rem;">
+              <div class="card-label">
+                <i data-lucide="arrow-left-right" style="width:14px; height:14px; color:var(--primary);"></i>
+                <span>LOANS & DEBT</span>
+              </div>
+              <button class="btn-solar outline" onclick="showPage('loans')" style="font-size:0.75rem; padding:0.38rem 0.75rem;">
+                <span>Manage</span> <i data-lucide="arrow-right" style="width:13px; height:13px;"></i>
+              </button>
+            </div>
+            <div id="dashLoanContent"></div>
+          </section>
+
+          <section class="bento-card">
+            <div class="card-label">
+              <i data-lucide="compass" style="width:14px; height:14px; color:var(--accent-olive);"></i>
+              <span>WORKSPACE SHORTCUTS</span>
+            </div>
+            <div class="shortcut-list">
+              <button class="shortcut-tile" onclick="showPage('budget')">
+                <i data-lucide="pie-chart"></i> Budgets
+              </button>
+              <button class="shortcut-tile" onclick="showPage('savings')">
+                <i data-lucide="target"></i> Savings Goals
+              </button>
+              <button class="shortcut-tile" onclick="showPage('recurring')">
+                <i data-lucide="repeat"></i> Subscriptions
+              </button>
+              <button class="shortcut-tile" onclick="showPage('guide')">
+                <i data-lucide="book-open"></i> User Guide
+              </button>
+            </div>
+          </section>
         </div>
-        <div id="txList"></div>
       </div>
     </div>
 
-    <!-- PORTALS -->
+    <!-- BUDGETING PAGE -->
     <div id="page-budget" class="page">
       <div class="portal-header-row">
         <div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Budget Planner</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Set category spending boundaries and avoid overspending.</p>
+          <h2>Budget Planner</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Set calm monthly boundaries per category to prevent overspending.</p>
         </div>
         <button class="btn-solar" onclick="openModal('budgetModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> Add Budget
@@ -284,11 +309,12 @@
       <div class="bento-grid" id="budgetGrid"></div>
     </div>
 
+    <!-- GOALS PAGE -->
     <div id="page-savings" class="page">
       <div class="portal-header-row">
         <div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Financial Savings Goals</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Track savings goals for laptops, books, or semester fees.</p>
+          <h2>Savings Goals</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Save steadily for laptops, textbooks, trips, or semester fees.</p>
         </div>
         <button class="btn-solar" onclick="openModal('goalModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> Create Goal
@@ -297,11 +323,12 @@
       <div class="bento-grid" id="goalsGrid"></div>
     </div>
 
+    <!-- RECURRING BILLS PAGE -->
     <div id="page-recurring" class="page">
       <div class="portal-header-row">
         <div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Subscriptions & Recurring Bills</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage regular monthly payments and digital subscriptions.</p>
+          <h2>Subscriptions & Bills</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Keep recurring monthly services and utility renewals visible.</p>
         </div>
         <button class="btn-solar" onclick="openModal('recModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> Add Subscription
@@ -310,11 +337,12 @@
       <div class="bento-grid" id="recList"></div>
     </div>
 
+    <!-- LOANS PAGE -->
     <div id="page-loans" class="page">
       <div class="portal-header-row">
         <div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Loans & Debt Management</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Audit record of payables and receivables with peers.</p>
+          <h2>Loans & Peer Debt</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Clear audit trail of payables and receivables with classmates.</p>
         </div>
         <button class="btn-solar" onclick="openModal('loanModal')">
           <i data-lucide="plus" style="width:16px; height:16px;"></i> Record Entry
@@ -323,91 +351,96 @@
       <div class="bento-grid" id="loanList"></div>
     </div>
 
+    <!-- HISTORY PAGE -->
     <div id="page-history" class="page">
       <div class="portal-header-row">
         <div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Transaction Audit History</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Full searchable database of your entire transaction timeline.</p>
+          <h2>Transaction Archive</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Full searchable timeline of every recorded entry.</p>
         </div>
         <div style="width:260px;" class="portal-search-wrapper">
-          <input type="text" id="historySearch" class="form-input-solar tx-search-mobile" placeholder="Filter history..." oninput="renderTransactions()" />
+          <input type="text" id="historySearch" class="form-input-solar tx-search-mobile" placeholder="Filter archive..." oninput="renderTransactions()" />
         </div>
       </div>
-      <div id="historyTxList"></div>
+      <div class="ledger-section-card">
+        <div id="historyTxList"></div>
+      </div>
     </div>
 
+    <!-- GUIDE PAGE -->
     <div id="page-guide" class="page">
       <div class="portal-header-row">
         <div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">System Onboarding Guide</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Learn how to maximize your UniWallet setup in 5 steps.</p>
+          <h2>Workspace Guide</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Five calm habits to stay on top of student finances.</p>
         </div>
-        <div class="pill">SaaS Master Edition</div>
+        <span class="pill">Editorial Edition</span>
       </div>
 
       <div class="bento-grid">
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--primary)">STEP 01</div>
-          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Secure Your Identity</div>
-          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
-            Navigate to <strong>Identity Settings</strong> in the sidebar. Upload a photo and customize your student profile.
+          <div class="card-label" style="color:var(--primary)">CHAPTER 01</div>
+          <div style="font-family:var(--font-heading); font-size:1.3rem; font-weight:600; margin-top:0.45rem;">Personalize Your Ledger</div>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-top:0.55rem; line-height:1.6;">
+            Open <strong>Profile & Settings</strong> from the top bar to upload an avatar and update your university contact details.
           </p>
         </div>
 
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--primary)">STEP 02</div>
-          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Log Daily Spends</div>
-          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
-            Use the <strong>Quick Log</strong> widget on your dashboard to post daily expenses or income instantly.
+          <div class="card-label" style="color:var(--primary)">CHAPTER 02</div>
+          <div style="font-family:var(--font-heading); font-size:1.3rem; font-weight:600; margin-top:0.45rem;">Capture Daily Entries</div>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-top:0.55rem; line-height:1.6;">
+            Use the <strong>Quick Ledger Entry</strong> block on Overview to log campus meals, transit, or allowance deposits in seconds.
           </p>
         </div>
 
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--primary)">STEP 03</div>
-          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Set Budget Limits</div>
-          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
-            In the <strong>Budgeting</strong> portal, define limits for categories. Visual bars warn you when exceeding 90%.
+          <div class="card-label" style="color:var(--primary)">CHAPTER 03</div>
+          <div style="font-family:var(--font-heading); font-size:1.3rem; font-weight:600; margin-top:0.45rem;">Define Category Limits</div>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-top:0.55rem; line-height:1.6;">
+            In <strong>Budgets</strong>, set monthly caps per category. Automated alerts notify you at 50%, 80%, and 100% usage.
           </p>
         </div>
 
         <div class="bento-card grid-w-2">
-          <div class="card-label" style="color:var(--primary)">STEP 04</div>
-          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem;">Track Peer Debts</div>
-          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.5;">
-            Log payables and receivables under <strong>Loans & Debt</strong>. Click <strong>Settle Entry</strong> when paid.
+          <div class="card-label" style="color:var(--primary)">CHAPTER 04</div>
+          <div style="font-family:var(--font-heading); font-size:1.3rem; font-weight:600; margin-top:0.45rem;">Settle Peer Balances</div>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-top:0.55rem; line-height:1.6;">
+            Track shared lunches or project fees under <strong>Loans</strong>, and mark them settled as soon as they're squared up.
           </p>
         </div>
 
         <div class="bento-card grid-w-4">
-          <div class="card-label" style="color:var(--primary); justify-content:center;">STEP 05</div>
-          <div style="font-size:1.15rem; font-weight:700; margin-top:0.4rem; text-align:center;">Monitor Health Score</div>
-          <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.6rem; line-height:1.6; text-align:center; max-width:780px; margin-left:auto; margin-right:auto;">
-            The <strong>Insights Panel</strong> calculates a dynamic score based on monthly savings. Maintain a score above 70% to stay in optimal student financial health!
+          <div class="card-label" style="color:var(--primary); justify-content:center;">CHAPTER 05</div>
+          <div style="font-family:var(--font-heading); font-size:1.35rem; font-weight:600; margin-top:0.45rem; text-align:center;">Watch Your Financial Health Score</div>
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:0.55rem; line-height:1.65; text-align:center; max-width:720px; margin-left:auto; margin-right:auto;">
+            Your <strong>Financial Insights</strong> card computes a live savings health ratio from monthly income and spending. Keeping it above 70% builds a resilient semester cushion.
           </p>
         </div>
       </div>
     </div>
 
+    <!-- PROFILE PAGE -->
     <div id="page-profile" class="page">
       <div class="portal-header-row">
         <div>
-          <h2 style="font-size: 1.4rem; font-weight: 700;">Identity & Settings</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Manage your profile identity, contact details, and local data persistence.</p>
+          <h2>Identity & Settings</h2>
+          <p style="font-size: 0.875rem; color: var(--text-secondary);">Manage your profile, contact info, and on-device storage.</p>
         </div>
       </div>
 
       <div class="bento-grid">
         <div class="bento-card grid-w-2 grid-h-2">
-          <div class="card-label">User Profile</div>
-          <div style="display:flex; flex-direction:column; align-items:center; margin-top:1.5rem;">
+          <div class="card-label">USER PROFILE</div>
+          <div style="display:flex; flex-direction:column; align-items:center; margin-top:1.35rem;">
             <div class="profile-avatar" id="profileDisplay">
-              <span id="avatarInitial">👤</span>
+              <span id="avatarInitial">U</span>
             </div>
             <input type="file" id="avatarInput" hidden accept="image/*" onchange="handleAvatar(this)" />
-            <button class="btn-solar outline" style="font-size:0.75rem; padding:0.4rem 0.9rem;"
+            <button class="btn-solar outline" style="font-size:0.78rem; padding:0.45rem 0.95rem;"
               onclick="document.getElementById('avatarInput').click()">Upload Photo</button>
           </div>
-          <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.9rem;">
+          <div style="margin-top:1.4rem; display:flex; flex-direction:column; gap:0.9rem;">
             <div>
               <label class="form-label">Full Name</label>
               <input class="form-input-solar" id="profName" placeholder="Enter full name" />
@@ -420,23 +453,23 @@
               <label class="form-label">Phone Number</label>
               <input class="form-input-solar" id="profPhone" placeholder="+94 7X XXX XXXX" />
             </div>
-            <button class="btn-solar" onclick="saveProfile()" style="margin-top:0.5rem;">Save Identity</button>
+            <button class="btn-solar" onclick="saveProfile()" style="margin-top:0.4rem;">Save Identity</button>
           </div>
         </div>
 
         <div class="bento-card grid-w-2">
-          <div class="card-label">Data Management</div>
-          <div style="margin-top:1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div class="card-label">SESSION & LOCAL DATA</div>
+          <div style="margin-top:1.15rem; display: flex; flex-direction: column; gap: 1rem;">
             <div>
               <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
-                Logout of your active session on this device.
+                Sign out of your active UniWallet session on this browser.
               </p>
               <button class="btn-solar outline" style="width: 100%; border-color: var(--danger); color: var(--danger);"
                 onclick="logout()">Logout Session</button>
             </div>
             <div style="border-top: 1px solid var(--border-color); padding-top: 1rem;">
               <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
-                Clearing data will permanently reset transactions, budgets, goals, and recurring entries stored in LocalStorage.
+                Clearing local data permanently resets transactions, budgets, goals, loans, and subscriptions stored in this browser.
               </p>
               <button class="danger-btn" style="width: 100%;" onclick="clearAllData()">Clear Local Data</button>
             </div>
@@ -444,13 +477,18 @@
         </div>
       </div>
     </div>
+
+    <footer class="workspace-footer">
+      <span>&copy; 2026 UniWallet — Personal Student Finance Ledger</span>
+      <span>Crafted by <strong>Afsal Ahamad</strong></span>
+    </footer>
   </main>
 
   <!-- MODALS -->
-  <div class="modal-overlay" id="budgetModal">
+  <div class="modal-overlay" id="budgetModal" onclick="if(event.target===this) closeModal('budgetModal')">
     <div class="modal">
       <h3>Set Category Budget</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Define a spending limit for this category.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.4rem;">Define a monthly spending cap for this category.</p>
       <div>
         <label class="form-label">Category</label>
         <select class="form-input-solar" id="budgetCat">
@@ -467,17 +505,17 @@
         <label class="form-label">Monthly Limit (Rs)</label>
         <input class="form-input-solar" id="budgetAmt" type="number" placeholder="5000" />
       </div>
-      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+      <div style="display:flex; gap:0.75rem; margin-top:1.6rem;">
         <button class="btn-solar" style="flex:1" onclick="saveBudget()">Save Budget</button>
         <button class="btn-solar outline" style="flex:1" onclick="closeModal('budgetModal')">Cancel</button>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="goalModal">
+  <div class="modal-overlay" id="goalModal" onclick="if(event.target===this) closeModal('goalModal')">
     <div class="modal">
       <h3>New Savings Goal</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Track target savings for major milestones.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.4rem;">Track target savings for major student milestones.</p>
       <div>
         <label class="form-label">Goal Title</label>
         <input class="form-input-solar" id="goalName" placeholder="e.g. Laptop Upgrade" />
@@ -486,34 +524,33 @@
         <label class="form-label">Target Amount (Rs)</label>
         <input class="form-input-solar" id="goalTarget" type="number" placeholder="60000" />
       </div>
-      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+      <div style="display:flex; gap:0.75rem; margin-top:1.6rem;">
         <button class="btn-solar" style="flex:1" onclick="saveGoal()">Create Goal</button>
         <button class="btn-solar outline" style="flex:1" onclick="closeModal('goalModal')">Cancel</button>
       </div>
     </div>
   </div>
 
-  <!-- CUSTOM DEPOSIT MODAL FOR ADD MONEY -->
   <div class="modal-overlay" id="goalDepositModal" onclick="if(event.target===this) closeModal('goalDepositModal')">
     <div class="modal">
-      <h3>💰 Add Money to Savings Goal</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.25rem;">Enter the amount you want to add to this goal.</p>
-      <div id="goalDepositError" style="display:none; color:var(--danger); font-size:0.85rem; font-weight:600; margin-bottom:1rem; padding:0.6rem 0.85rem; background:var(--danger-bg); border-radius:var(--radius-sm); border:1px solid rgba(239, 68, 68, 0.25);"></div>
+      <h3>Add to Savings Goal</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.2rem;">Enter the deposit amount you want to allocate.</p>
+      <div id="goalDepositError" style="display:none; color:var(--danger); font-size:0.85rem; font-weight:600; margin-bottom:1rem; padding:0.6rem 0.85rem; background:var(--danger-bg); border-radius:var(--radius-sm); border:1px solid rgba(180, 62, 50, 0.25);"></div>
       <div>
         <label class="form-label">Amount (Rs)</label>
-        <input class="form-input-solar" id="goalDepositAmt" type="number" placeholder="Rs 5,000" min="1" style="min-height:52px;" onkeydown="if(event.key==='Enter') saveGoalDeposit()" />
+        <input class="form-input-solar" id="goalDepositAmt" type="number" placeholder="5000" min="1" style="min-height:48px;" onkeydown="if(event.key==='Enter') saveGoalDeposit()" />
       </div>
-      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
-        <button class="btn-solar" style="flex:1; min-height:52px;" onclick="saveGoalDeposit()">Add Money</button>
-        <button class="btn-solar outline" style="flex:1; min-height:52px;" onclick="closeModal('goalDepositModal')">Cancel</button>
+      <div style="display:flex; gap:0.75rem; margin-top:1.6rem;">
+        <button class="btn-solar" style="flex:1; min-height:46px;" onclick="saveGoalDeposit()">Add Money</button>
+        <button class="btn-solar outline" style="flex:1; min-height:46px;" onclick="closeModal('goalDepositModal')">Cancel</button>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="recModal">
+  <div class="modal-overlay" id="recModal" onclick="if(event.target===this) closeModal('recModal')">
     <div class="modal">
       <h3>Add Subscription</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Record recurring digital services or regular bills.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.4rem;">Record recurring digital services or monthly bills.</p>
       <div>
         <label class="form-label">Service Name</label>
         <input class="form-input-solar" id="recName" placeholder="e.g. Spotify / Gym" />
@@ -526,17 +563,17 @@
         <label class="form-label">Next Renewal Date</label>
         <input class="form-input-solar" id="recDate" type="date" />
       </div>
-      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+      <div style="display:flex; gap:0.75rem; margin-top:1.6rem;">
         <button class="btn-solar" style="flex:1" onclick="saveRecurring()">Save Service</button>
         <button class="btn-solar outline" style="flex:1" onclick="closeModal('recModal')">Cancel</button>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="loanModal">
+  <div class="modal-overlay" id="loanModal" onclick="if(event.target===this) closeModal('loanModal')">
     <div class="modal">
       <h3>Record Loan or Debt</h3>
-      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.5rem;">Keep track of payables and receivables with classmates or friends.</p>
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem; margin-bottom:1.4rem;">Track payables and receivables with classmates or friends.</p>
       <div>
         <label class="form-label">Person Name</label>
         <input class="form-input-solar" id="loanPerson" placeholder="John Doe" />
@@ -560,7 +597,7 @@
         <label class="form-label">Due Date</label>
         <input class="form-input-solar" id="loanDate" type="date" />
       </div>
-      <div style="display:flex; gap:0.75rem; margin-top:1.75rem;">
+      <div style="display:flex; gap:0.75rem; margin-top:1.6rem;">
         <button class="btn-solar" style="flex:1" onclick="saveLoan()">Record Entry</button>
         <button class="btn-solar outline" style="flex:1" onclick="closeModal('loanModal')">Cancel</button>
       </div>
@@ -571,50 +608,95 @@
 
   <script src="app.js"></script>
 
-  <!-- 7-ITEM MOBILE BOTTOM NAVIGATION BAR (<768px) -->
-  <nav class="mobile-nav">
-    <button class="mobile-nav-item active" onclick="showPage('overview')">
-      <i data-lucide="layout-dashboard"></i><span>Home</span>
-    </button>
-    <button class="mobile-nav-item" onclick="showPage('budget')">
-      <i data-lucide="pie-chart"></i><span>Budget</span>
-    </button>
-    <button class="mobile-nav-item" onclick="showPage('savings')">
-      <i data-lucide="target"></i><span>Goals</span>
-    </button>
-    <button class="mobile-nav-item" onclick="showPage('loans')">
-      <i data-lucide="arrow-left-right"></i><span>Loans</span>
-    </button>
-    <button class="mobile-nav-item" onclick="showPage('recurring')">
-      <i data-lucide="repeat"></i><span>Bills</span>
-    </button>
-    <button class="mobile-nav-item" onclick="showPage('history')">
-      <i data-lucide="history"></i><span>History</span>
-    </button>
-    <button class="mobile-nav-item" onclick="showPage('profile')">
-      <i data-lucide="user"></i><span>Profile</span>
-    </button>
+  <!-- ACCESSIBLE SIDE EDGE HANDLE & BACKDROP (<768px) -->
+  <button class="mobile-side-handle" onclick="toggleMobileNav(true)" aria-label="Open side navigation" title="Open Menu">
+    <i data-lucide="chevron-right" style="width:15px; height:15px;"></i>
+  </button>
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop" onclick="toggleMobileNav(false)"></div>
+
+  <!-- ACCESSIBLE SIDE NAVIGATION DRAWER (<768px) -->
+  <!-- Each .nav-icon-slot can be swapped with custom icons later -->
+  <nav class="mobile-nav" id="mobileSideNav" aria-label="Mobile side navigation" aria-hidden="true">
+    <div class="mobile-nav-header">
+      <div class="brand-logo" onclick="showPage('overview'); toggleMobileNav(false);" role="button" tabindex="0">
+        <div class="brand-logo-mark" style="width:30px; height:30px;">
+          <i data-lucide="wallet" style="width:16px; height:16px;"></i>
+        </div>
+        <div style="font-size:1.25rem;">Uni<span>Wallet</span></div>
+      </div>
+      <button class="header-action-btn" onclick="toggleMobileNav(false)" aria-label="Close navigation menu" style="width:32px; height:32px;">
+        <i data-lucide="x" style="width:16px; height:16px;"></i>
+      </button>
+    </div>
+
+    <div class="mobile-nav-list">
+      <button class="mobile-nav-item active" data-page="overview" onclick="showPage('overview')">
+        <span class="nav-icon-slot"><i data-lucide="layout-dashboard"></i></span>
+        <span>Overview</span>
+      </button>
+      <button class="mobile-nav-item" data-page="budget" onclick="showPage('budget')">
+        <span class="nav-icon-slot"><i data-lucide="pie-chart"></i></span>
+        <span>Budgets</span>
+      </button>
+      <button class="mobile-nav-item" data-page="savings" onclick="showPage('savings')">
+        <span class="nav-icon-slot"><i data-lucide="target"></i></span>
+        <span>Goals</span>
+      </button>
+      <button class="mobile-nav-item" data-page="recurring" onclick="showPage('recurring')">
+        <span class="nav-icon-slot"><i data-lucide="repeat"></i></span>
+        <span>Bills</span>
+      </button>
+      <button class="mobile-nav-item" data-page="loans" onclick="showPage('loans')">
+        <span class="nav-icon-slot"><i data-lucide="arrow-left-right"></i></span>
+        <span>Loans</span>
+      </button>
+      <button class="mobile-nav-item" data-page="history" onclick="showPage('history')">
+        <span class="nav-icon-slot"><i data-lucide="history"></i></span>
+        <span>History</span>
+      </button>
+      <button class="mobile-nav-item" data-page="guide" onclick="showPage('guide')">
+        <span class="nav-icon-slot"><i data-lucide="book-open"></i></span>
+        <span>Guide</span>
+      </button>
+      <button class="mobile-nav-item" data-page="profile" onclick="showPage('profile')">
+        <span class="nav-icon-slot"><i data-lucide="user"></i></span>
+        <span>Profile</span>
+      </button>
+    </div>
+
+    <div class="mobile-nav-footer">
+      <button class="mobile-nav-item theme-toggle-btn" onclick="toggleTheme()">
+        <span class="nav-icon-slot"><i data-lucide="moon"></i></span>
+        <span>Toggle Theme</span>
+      </button>
+      <button class="mobile-nav-item" onclick="logout()" style="color: var(--danger);">
+        <span class="nav-icon-slot" style="color: var(--danger);"><i data-lucide="log-out"></i></span>
+        <span>Logout</span>
+      </button>
+    </div>
   </nav>
 
   <!-- WELCOME MODAL -->
-  <div class="modal-overlay" id="welcomeModal">
-    <div class="modal" style="max-width: 480px; text-align: center;">
-      <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
-      <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.5rem;">Welcome to UniWallet!</h2>
-      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
-        Your high-fidelity financial journey begins now. We've credited your account with <strong style="color:var(--primary);">Rs 1,000.00</strong> as an initial balance.
+  <div class="modal-overlay" id="welcomeModal" onclick="if(event.target===this) closeModal('welcomeModal')">
+    <div class="modal" style="max-width: 470px; text-align: center;">
+      <div style="width:52px; height:52px; border-radius:14px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+        <i data-lucide="sparkles" style="width:24px; height:24px;"></i>
+      </div>
+      <h2 style="font-family: var(--font-heading); font-size: 1.75rem; font-weight:600; margin-bottom: 0.45rem;">Welcome to UniWallet</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.55; margin-bottom: 1.35rem;">
+        Your personal student ledger is ready. We've started your balance with <strong style="color:var(--primary);">Rs 1,000.00</strong> so you can explore right away.
       </p>
 
-      <div style="text-align: left; background: var(--bg-input); padding: 1.25rem; border-radius: var(--radius-md); border:1px solid var(--border-color); margin-bottom: 1.5rem;">
-        <div style="font-size: 0.7rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing:0.05em;">Pro Tips:</div>
-        <ul style="font-size: 0.8rem; color: var(--text-secondary); list-style: none; padding: 0;">
-          <li style="margin-bottom: 0.6rem;">⚡ <strong>Quick Log:</strong> Switch between Income/Expense easily.</li>
-          <li style="margin-bottom: 0.6rem;">🧹 <strong>Data Reset:</strong> Reset data anytime via Profile settings.</li>
-          <li style="margin-bottom: 0.4rem;">🔒 <strong>Private:</strong> Data stays saved on your local device.</li>
+      <div style="text-align: left; background: var(--bg-input); padding: 1.15rem; border-radius: var(--radius-md); border:1px solid var(--border-color); margin-bottom: 1.4rem;">
+        <div style="font-size: 0.7rem; font-weight: 700; color: var(--primary); margin-bottom: 0.65rem; text-transform: uppercase; letter-spacing:0.06em;">Getting Started</div>
+        <ul style="font-size: 0.82rem; color: var(--text-secondary); list-style: none; padding: 0; display:flex; flex-direction:column; gap:0.5rem;">
+          <li><strong>Quick Entry:</strong> Switch between Expense and Income in one click.</li>
+          <li><strong>Private Storage:</strong> Everything stays saved locally in your browser.</li>
+          <li><strong>Reset Anytime:</strong> Manage or clear data inside Profile Settings.</li>
         </ul>
       </div>
 
-      <button class="btn-solar" style="width: 100%; padding: 0.85rem;" onclick="closeModal('welcomeModal')">Get Started Now</button>
+      <button class="btn-solar" style="width: 100%; padding: 0.85rem;" onclick="closeModal('welcomeModal')">Open My Ledger</button>
     </div>
   </div>
 </body>

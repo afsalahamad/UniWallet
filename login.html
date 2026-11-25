@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Afsal Ahamad">
   <title>Login — UniWallet</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=6">
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="theme.js"></script>
   <script src="auth.js"></script>
@@ -17,59 +15,91 @@
 
 <body class="auth-body">
 
-  <button class="theme-toggle-btn" onclick="toggleTheme()"
-    style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--card-shadow); z-index: 1000;">
-    <i data-lucide="sun" style="width:18px; height:18px;"></i>
+  <button class="auth-theme-btn theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">
+    <i data-lucide="moon" style="width:17px; height:17px;"></i>
   </button>
 
-  <div class="auth-container">
-    <div class="sidebar-logo" style="margin-bottom: 2rem; font-size: 2rem; justify-content: center;">
-      <div class="sidebar-logo-icon" style="width:42px; height:42px;">
-        <i data-lucide="wallet" style="width:22px; height:22px;"></i>
+  <div class="auth-shell">
+    <!-- Left Editorial Showcase -->
+    <section class="auth-editorial-aside">
+      <div class="brand-logo" style="margin-bottom: 1.75rem;">
+        <div class="brand-logo-mark">
+          <i data-lucide="wallet" style="width:18px; height:18px;"></i>
+        </div>
+        <div>Uni<span>Wallet</span></div>
       </div>
-      Uni<span>Wallet</span>
-    </div>
 
-    <div class="auth-card">
-      <h1 class="auth-title">Welcome Back</h1>
-      <p class="auth-subtitle">Log in to manage your university finances.</p>
+      <div class="auth-editorial-kicker">
+        <i data-lucide="book-open" style="width:13px; height:13px;"></i> Student Financial Journal
+      </div>
 
-      <div id="authError" class="auth-error" style="display:none;"></div>
+      <h1 class="auth-editorial-headline">
+        Calm, intentional <em>money clarity</em> for university life.
+      </h1>
 
-      <form onsubmit="login(event)">
-        <div class="form-group">
-          <label class="form-label">University Email</label>
-          <input type="email" id="loginEmail" class="form-input" placeholder="eg: alexjohn.gmail.com" required />
-        </div>
+      <p class="auth-editorial-copy">
+        Keep track of campus meals, semester budgets, shared peer loans, and savings goals in one quiet, private workspace.
+      </p>
 
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
-            <label class="form-label" style="margin-bottom: 0;">Password</label>
-            <a href="javascript:void(0)" onclick="openForgotPasswordModal()" class="forgot-password-link">Forgot Password?</a>
+      <ul class="auth-editorial-points">
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>Private on-device ledger — zero external tracking or bank linking required.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>Category budgets, 7-day spend trends, and smart milestone alerts.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>Instant guest sandbox mode if you want to explore first.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Right Focused Login Card -->
+    <div class="auth-container">
+      <div class="auth-card">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-subtitle">Sign in to open your personal ledger.</p>
+
+        <div id="authError" class="auth-error" style="display:none;"></div>
+
+        <form onsubmit="login(event)">
+          <div class="form-group">
+            <label class="form-label">University Email</label>
+            <input type="email" id="loginEmail" class="form-input" placeholder="e.g. alex@university.edu" required />
           </div>
-          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required />
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <label class="form-label" style="margin-bottom: 0;">Password</label>
+              <a href="javascript:void(0)" onclick="openForgotPasswordModal()" class="forgot-password-link">Forgot Password?</a>
+            </div>
+            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required />
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Enter Workspace</button>
+        </form>
+
+        <a href="guest.html" class="btn-solar outline"
+          style="margin-top: 0.85rem; width: 100%; text-decoration: none;">
+          <i data-lucide="sparkles" style="width:15px; height:15px;"></i> Explore as Guest
+        </a>
+
+        <div class="auth-footer">
+          New to UniWallet? <a href="signup.html">Create an Account</a>
         </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Enter Dashboard</button>
-      </form>
-
-      <a href="guest.html" class="btn-solar outline"
-        style="margin-top: 1rem; width: 100%; text-decoration: none; text-align: center;">
-        <i data-lucide="sparkles" style="width:16px; height:16px;"></i> Explore as Guest
-      </a>
-
-      <div class="auth-footer">
-        New to UniWallet? <a href="signup.html">Create an Account</a>
       </div>
     </div>
   </div>
 
-  <!-- 🔒 Forgot Password Modal -->
+  <!-- Forgot Password Modal -->
   <div id="forgotPasswordModal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-icon-badge primary">
-          <i data-lucide="key-round" style="width:22px; height:22px;"></i>
+          <i data-lucide="key-round" style="width:20px; height:20px;"></i>
         </div>
         <div>
           <h2 class="modal-title" id="forgotModalTitle">Account Recovery</h2>
@@ -81,35 +111,33 @@
       </div>
 
       <div class="modal-body">
-        <!-- Modal Inline Error -->
-        <div id="forgotModalError" class="auth-error" style="display:none; margin-bottom: 1.25rem;"></div>
+        <div id="forgotModalError" class="auth-error" style="display:none; margin-bottom: 1.15rem;"></div>
 
         <!-- Step 1: Verify Email -->
         <div id="forgotStep1" class="modal-step">
           <form onsubmit="handleForgotStep1(event)">
             <div class="form-group">
               <label class="form-label">University Email</label>
-              <input type="email" id="forgotEmail" class="form-input" placeholder="eg: alexjohn.gmail.com" required />
+              <input type="email" id="forgotEmail" class="form-input" placeholder="e.g. alex@university.edu" required />
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
               Verify Account Email
             </button>
           </form>
         </div>
 
-        <!-- Step 2: Verification Method (Security Question or Recovery Code) -->
+        <!-- Step 2: Verification Method -->
         <div id="forgotStep2" class="modal-step" style="display:none;">
           <div class="recovery-tab-group">
             <button type="button" class="recovery-tab active" id="tabQuestionBtn" onclick="switchRecoveryTab('question')">
-              <i data-lucide="help-circle" style="width:16px; height:16px;"></i> Security Question
+              <i data-lucide="help-circle" style="width:15px; height:15px;"></i> Security Question
             </button>
             <button type="button" class="recovery-tab" id="tabCodeBtn" onclick="switchRecoveryTab('code')">
-              <i data-lucide="shield" style="width:16px; height:16px;"></i> Recovery Code
+              <i data-lucide="shield" style="width:15px; height:15px;"></i> Recovery Code
             </button>
           </div>
 
           <form onsubmit="handleForgotStep2(event)">
-            <!-- Option A: Security Question -->
             <div id="tabQuestionContent">
               <div class="form-group" style="margin-bottom: 1rem;">
                 <label class="form-label">Security Question</label>
@@ -121,18 +149,17 @@
               </div>
             </div>
 
-            <!-- Option B: Recovery Code -->
             <div id="tabCodeContent" style="display:none;">
               <div class="form-group">
                 <label class="form-label">Secret Recovery Code</label>
-                <input type="text" id="forgotCode" class="form-input" placeholder="e.g. UNI-8K2P-9M4Q" style="letter-spacing: 0.05em; font-family: monospace;" />
+                <input type="text" id="forgotCode" class="form-input" placeholder="e.g. UNI-8K2P-9M4Q" style="letter-spacing: 0.05em; font-family: var(--font-mono);" />
                 <p class="form-hint" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.35rem;">
                   Enter the 12-character recovery code generated when you registered.
                 </p>
               </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem;">
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;">
               Verify & Proceed
             </button>
           </form>
@@ -149,7 +176,7 @@
               <label class="form-label">Confirm New Password</label>
               <input type="password" id="confirmNewPassword" class="form-input" placeholder="Re-enter new password" required minlength="6" />
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.25rem;">
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;">
               Update Password
             </button>
           </form>
@@ -157,11 +184,11 @@
 
         <!-- Step 4: Reset Success -->
         <div id="forgotStep4" class="modal-step" style="display:none; text-align: center;">
-          <div class="success-icon-circle" style="width: 56px; height: 56px; border-radius: 50%; background: var(--success-bg); color: var(--success); display: flex; align-items: center; justify-content: center; margin: 0.5rem auto 1rem auto;">
-            <i data-lucide="check-circle-2" style="width: 32px; height: 32px;"></i>
+          <div style="width: 54px; height: 54px; border-radius: 50%; background: var(--success-bg); color: var(--success); display: flex; align-items: center; justify-content: center; margin: 0.5rem auto 1rem auto;">
+            <i data-lucide="check-circle-2" style="width: 28px; height: 28px;"></i>
           </div>
-          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">Password Reset Successful</h3>
-          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.4;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.45rem;">Password Reset Successful</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.35rem; line-height: 1.5;">
             Your password has been updated. You can now log in to your UniWallet account.
           </p>
           <button type="button" class="btn btn-primary" onclick="finishPasswordReset()" style="width: 100%;">
@@ -173,8 +200,7 @@
   </div>
 
   <footer class="footer">
-    &copy; 2026 UniWallet. All rights reserved.<br />
-    Developed by <strong>Afsal Ahamad</strong>
+    &copy; 2026 UniWallet. All rights reserved. &middot; Developed by <strong>Afsal Ahamad</strong>
   </footer>
 
   <script>

@@ -409,6 +409,23 @@ function clearAllNotifications() {
     }
 }
 
+// ---- MOBILE SIDE NAV CONTROLLER ----
+function toggleMobileNav(forceOpen) {
+    const nav = document.getElementById('mobileSideNav');
+    const backdrop = document.getElementById('mobileNavBackdrop');
+    const btn = document.getElementById('mobileMenuBtn');
+    const handle = document.querySelector('.mobile-side-handle');
+    if (!nav || !backdrop) return;
+
+    const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !nav.classList.contains('open');
+    nav.classList.toggle('open', shouldOpen);
+    backdrop.classList.toggle('open', shouldOpen);
+    nav.setAttribute('aria-hidden', String(!shouldOpen));
+    if (btn) btn.setAttribute('aria-expanded', String(shouldOpen));
+    if (handle) handle.style.display = shouldOpen ? 'none' : '';
+    document.body.style.overflow = shouldOpen ? 'hidden' : '';
+}
+
 // ---- NAVIGATION ----
 function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -418,8 +435,11 @@ function showPage(name) {
     if (target) {
         target.classList.add('active');
         document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(btn => {
-            if (btn.onclick && btn.onclick.toString().includes(name)) btn.classList.add('active');
+            if (btn.dataset.page === name || (btn.onclick && btn.onclick.toString().includes(name))) {
+                btn.classList.add('active');
+            }
         });
+        toggleMobileNav(false);
 
         const pageTitles = {
             overview: 'Dashboard',
@@ -1105,6 +1125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+        toggleMobileNav(false);
         closeModal('goalDepositModal');
         closeModal('goalModal');
         closeModal('budgetModal');

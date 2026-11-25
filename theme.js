@@ -1,13 +1,13 @@
-// theme.js - Theme Toggle Logic
+// theme.js - Warm Editorial Dual Theme Controller
 
 const THEME_KEY = 'uniwallet_theme';
 
 function initTheme() {
     const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-    } else {
+    if (savedTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
     }
 }
 
@@ -24,12 +24,20 @@ function updateThemeIcon() {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     const buttons = document.querySelectorAll('.theme-toggle-btn');
     buttons.forEach(btn => {
-        const iconSpan = btn.querySelector('span');
-        if (iconSpan) {
-            btn.innerHTML = `<i data-lucide="${isLight ? 'moon' : 'sun'}"></i> <span>Toggle Theme</span>`;
+        const iconSlot = btn.querySelector('.nav-icon-slot');
+        const iconSpan = btn.querySelector('span:not(.nav-icon-slot)');
+        const label = isLight ? 'Dark Mode' : 'Light Mode';
+        const iconName = isLight ? 'moon' : 'sun';
+        if (iconSlot) {
+            iconSlot.innerHTML = `<i data-lucide="${iconName}"></i>`;
+            if (iconSpan) iconSpan.textContent = label;
+        } else if (iconSpan) {
+            btn.innerHTML = `<i data-lucide="${iconName}"></i> <span>${label}</span>`;
         } else {
-            btn.innerHTML = `<i data-lucide="${isLight ? 'moon' : 'sun'}"></i>`;
+            btn.innerHTML = `<i data-lucide="${iconName}" style="width:17px; height:17px;"></i>`;
         }
+        btn.setAttribute('aria-label', `Switch to ${label}`);
+        btn.setAttribute('title', `Switch to ${label}`);
     });
 
     if (window.lucide && typeof window.lucide.createIcons === 'function') {
@@ -37,8 +45,8 @@ function updateThemeIcon() {
     }
 }
 
-// Run as soon as script loads
+// Run immediately to avoid flash of unstyled theme
 initTheme();
 
-// Update icons after DOM loads
+// Sync icons once DOM is ready
 document.addEventListener('DOMContentLoaded', updateThemeIcon);

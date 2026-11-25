@@ -6,98 +6,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Afsal Ahamad">
   <title>Guest Access — UniWallet</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=6">
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="theme.js"></script>
   <script src="auth.js"></script>
   <script src="cursor.js"></script>
-  <style>
-    .guest-icon {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      display: inline-block;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .feature-list {
-      text-align: left;
-      margin: 1.5rem 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .feature-list li {
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-    }
-
-    .feature-list li i {
-      color: #60A5FA;
-    }
-  </style>
 </head>
 
 <body class="auth-body">
 
-  <button class="theme-toggle-btn" onclick="toggleTheme()"
-    style="position: absolute; top: 1.5rem; right: 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-primary); box-shadow: var(--card-shadow); z-index: 1000;">
-    <i data-lucide="sun" style="width:18px; height:18px;"></i>
+  <button class="auth-theme-btn theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">
+    <i data-lucide="moon" style="width:17px; height:17px;"></i>
   </button>
 
-  <div class="auth-container">
-    <div class="sidebar-logo" style="margin-bottom: 2rem; font-size: 2rem; justify-content: center;">
-      <div class="sidebar-logo-icon" style="width:42px; height:42px;">
-        <i data-lucide="wallet" style="width:22px; height:22px;"></i>
+  <div class="auth-shell">
+    <!-- Left Editorial Showcase -->
+    <section class="auth-editorial-aside">
+      <div class="brand-logo" style="margin-bottom: 1.75rem;">
+        <div class="brand-logo-mark">
+          <i data-lucide="wallet" style="width:18px; height:18px;"></i>
+        </div>
+        <div>Uni<span>Wallet</span></div>
       </div>
-      Uni<span>Wallet</span>
-    </div>
 
-    <div class="auth-card" style="text-align: center;">
-      <span class="guest-icon">🎭</span>
-      <h1 class="auth-title">Guest Explorer</h1>
-      <p class="auth-subtitle">Experience UniWallet instantly without registration.</p>
+      <div class="auth-editorial-kicker">
+        <i data-lucide="compass" style="width:13px; height:13px;"></i> Instant Sandbox
+      </div>
 
-      <ul class="feature-list">
-        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> Instant access to all student finance features</li>
-        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> No registration or email required</li>
-        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> All data stored privately on your browser</li>
-        <li><i data-lucide="check-circle" style="width:18px; height:18px;"></i> Clean, high-fidelity SaaS dashboard</li>
+      <h1 class="auth-editorial-headline">
+        Preview the entire <em>student ledger</em> with zero setup.
+      </h1>
+
+      <p class="auth-editorial-copy">
+        Jump straight into UniWallet as a Guest Explorer. Test quick expense logs, budgets, savings goals, and loan tracking right in your browser.
+      </p>
+
+      <ul class="auth-editorial-points">
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>Full access to Overview, Budgets, Goals, Bills, and Loans.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>No email, password, or registration form required.</span>
+        </li>
+        <li>
+          <i data-lucide="check-circle-2"></i>
+          <span>All sandbox entries stay stored privately in your browser.</span>
+        </li>
       </ul>
+    </section>
 
-      <button onclick="tryGuestLogin()" class="btn-solar" style="width: 100%; padding: 0.85rem; font-size: 0.95rem; margin-bottom: 1.25rem;">
-        Launch Dashboard Now
-      </button>
+    <!-- Right Guest Card -->
+    <div class="auth-container">
+      <div class="auth-card" style="text-align: center;">
+        <div style="width:56px; height:56px; border-radius:16px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; margin:0 auto 1.1rem;">
+          <i data-lucide="sparkles" style="width:26px; height:26px;"></i>
+        </div>
+        <h2 class="auth-title">Guest Explorer</h2>
+        <p class="auth-subtitle">Experience UniWallet immediately without creating an account.</p>
 
-      <div class="auth-footer">
-        Want to save your data permanently? <a href="signup.html">Create Account</a>
+        <div style="text-align:left; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem 1.1rem; margin-bottom:1.4rem;">
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.65rem; font-size:0.84rem; color:var(--text-secondary);">
+            <li style="display:flex; align-items:center; gap:0.6rem;">
+              <i data-lucide="check" style="width:15px; height:15px; color:var(--success);"></i>
+              <span>Starts with Rs 1,000.00 sample balance</span>
+            </li>
+            <li style="display:flex; align-items:center; gap:0.6rem;">
+              <i data-lucide="check" style="width:15px; height:15px; color:var(--success);"></i>
+              <span>Try light & dark warm editorial themes</span>
+            </li>
+            <li style="display:flex; align-items:center; gap:0.6rem;">
+              <i data-lucide="check" style="width:15px; height:15px; color:var(--success);"></i>
+              <span>Reset or create a full account anytime</span>
+            </li>
+          </ul>
+        </div>
+
+        <button onclick="tryGuestLogin()" class="btn-solar" style="width: 100%; padding: 0.85rem; font-size: 0.92rem;">
+          <i data-lucide="arrow-right" style="width:16px; height:16px;"></i> Launch Workspace Now
+        </button>
+
+        <div class="auth-footer">
+          Want your own dedicated profile? <a href="signup.html">Create Account</a> &middot; <a href="login.html">Sign In</a>
+        </div>
       </div>
     </div>
   </div>
 
   <footer class="footer">
-    &copy; 2026 UniWallet. All rights reserved.<br />
-    Developed by <strong>Afsal Ahamad</strong>
+    &copy; 2026 UniWallet. All rights reserved. &middot; Developed by <strong>Afsal Ahamad</strong>
   </footer>
 
   <script>
     if (window.lucide) lucide.createIcons();
 
     function tryGuestLogin() {
-      console.log("Button clicked. Attempting guest login...");
       if (typeof guestLogin === 'function') {
         guestLogin();
       } else {
-        console.error("guestLogin function not found in auth.js!");
         const guestUser = { id: 'guest', name: 'Guest Explorer', email: 'guest@uniwallet.com', isGuest: true };
         localStorage.setItem('uniwallet_session', JSON.stringify(guestUser));
         sessionStorage.setItem('uniwallet_show_welcome', 'true');
